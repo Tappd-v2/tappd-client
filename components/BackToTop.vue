@@ -28,7 +28,7 @@ export default {
 <template>
   <div
     v-if="scrolled"
-    class="back-to-top bg-white px-4 fixed right-5 bottom-5 p-2 rounded-full cursor-pointer" @click="scrollToTop"
+    class="back-to-top bg-white px-4 fixed right-5 bottom-5 p-2 rounded-full cursor-pointer -z-10" @click="scrollToTop"
   >
     <i class="fas fa-arrow-up" />
   </div>

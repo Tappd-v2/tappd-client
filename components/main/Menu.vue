@@ -4,7 +4,13 @@ defineProps({
     type: Array,
     required: true,
   },
+  store: {
+    type: Object,
+    required: true,
+  },
 })
+
+const selectedItem = ref(null)
 </script>
 
 <template>
@@ -13,13 +19,11 @@ defineProps({
     :id="formatName(category.name)"
     :key="category.id"
     class="
-    pt-20
-    w-11/12
+    pt-20 w-11/12
     mx-auto
     flex
     text-md
-    flex-col
-  "
+    flex-col"
   >
     <h3
       class="
@@ -34,6 +38,7 @@ defineProps({
     <ul
       v-for="product in category.products"
       :key="product.id"
+      @click="selectedItem = product"
     >
       <li
         class="border-b py-5"
@@ -45,9 +50,10 @@ defineProps({
   "
         >
           <span>{{ product.name }}</span>
-          <span>&#8364{{ product.price }}</span>
+          <span>&#8364;{{ product.price }}</span>
         </div>
       </li>
     </ul>
   </div>
+  <MainItemDetail :item="selectedItem" :store="store" />
 </template>

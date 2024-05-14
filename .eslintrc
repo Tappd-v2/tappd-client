@@ -1,4 +1,4 @@
 {
   "extends": "@antfu",
-  "ignorePatterns":["/content/**"]
+  "ignorePatterns":["/content/**", "/presets/**", "/node_modules/**", "**/*.js", "**/*.ts", "**/*.json"],
 }

@@ -1,4 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.js
+import { createPinia } from 'pinia'
+import piniaPersistedstate from 'pinia-plugin-persistedstate'
+
 export default defineNuxtConfig({
   app: {
     head: {
@@ -10,7 +13,11 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@vueuse/nuxt', '@nuxtjs/seo', 'nuxt-primevue'],
+  site: {
+    url: 'https://example.com'
+  },
+
+  modules: ['@vueuse/nuxt', '@nuxtjs/seo', 'nuxt-primevue', '@pinia/nuxt',  '@pinia-plugin-persistedstate/nuxt'],
 
   runtimeConfig: {
     currencyKey: process.env.CURRENCY_API_KEY,
@@ -18,12 +25,13 @@ export default defineNuxtConfig({
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
     },
   },
+
   primevue: {
     importPT: { from: '~/presets/lara' },
   },
 
   css: [
-    'primevue/resources/themes/aura-light-blue/theme.css',
+    'primevue/resources/themes/lara-light-blue/theme.css',
     'primeicons/primeicons.css',
     '~/assets/css/tailwind.css',
   ],
@@ -33,5 +41,12 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
+  },
+
+  piniaPersistedstate: {
+    cookieOptions: {
+      sameSite: 'strict',
+    },
+    storage: 'localStorage'
   },
 })

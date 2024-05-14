@@ -37,3 +37,13 @@ defineProps({
     </li>
   </ul>
 </template>
+
+<style scoped>
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+</style>
