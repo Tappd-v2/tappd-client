@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.42.0",
+    "@nuxtjs/seo": "^2.0.0-rc.10",
+    "@vite-pwa/nuxt": "^0.7.0",
+    "@vueuse/core": "^10.9.0",
+    "@vueuse/nuxt": "^10.9.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.39.0",
+    "nuxt": "^3.11.2",
+    "nuxt-primevue": "^0.3.1",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@stripe/stripe-js": "^3.4.0",
+    "@vueuse/motion": "^2.1.0",
+    "primeicons": "^7.0.0",
+    "primevue": "^3.52.0",
+    "stripe": "^15.6.0"
+  }
+}
