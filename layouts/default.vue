@@ -3,10 +3,10 @@
     <header>
       <MainHeader />
     </header>
-    <main class="h-full pb-20 bg-gray-100">
+    <main class="bg-gray-100 flex-1">
       <slot />
     </main>
-    <footer>
+    <footer class="static bottom-0">
       <MainFooter />
     </footer>
   </div>

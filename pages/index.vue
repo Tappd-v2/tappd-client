@@ -1,4 +1,8 @@
 <script setup>
+import { useMenu } from '~/composables/useMenu'
+
+const { fetchCategories, fetchItems, menu, filterItems } = useMenu()
+
 useHead({
   title: 'Home',
   meta: [
@@ -9,12 +13,19 @@ useHead({
   ],
   titleTemplate: 'Tappd - %s',
 })
+
+onMounted(async () => {
+  await fetchCategories()
+  await fetchItems()
+})
 </script>
 
 <template>
-  <div
-    class="flex flex-col bg-gray-100"
-  >
-    <MainMenu />
+  <div>
+    <MainSearch :filter-items="filterItems" />
+    <MainCategories :menu="menu" />
+    <MainMenu :menu="menu" />
+    <MainNoResults v-if="!menu.length" />
+    <BackToTop />
   </div>
 </template>

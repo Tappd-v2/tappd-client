@@ -4,7 +4,6 @@ export function useMenu() {
   const items = ref([])
   const categories = ref([])
   const filteredItems = ref([])
-  const search = ref('')
   const menu = computed(() => {
     return categories.value
       .map((category) => {
@@ -14,12 +13,11 @@ export function useMenu() {
           products,
         }
       })
-      .filter(category => category.products?.length > 0) // Filter out categories without products
+      .filter(category => category.products?.length > 0)
   })
 
-  // filter items based on search query
-  const filterItems = () => {
-    filteredItems.value = items.value.filter(item => item.name.toLowerCase().includes(search.value.toLowerCase()))
+  const filterItems = (search) => {
+    filteredItems.value = items.value.filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
   }
 
   // mock the fetches with hardcoded data
@@ -30,7 +28,6 @@ export function useMenu() {
       { id: 3, name: 'Cocktails' },
       { id: 4, name: 'Soft Drinks' },
       { id: 5, name: 'Hot Drinks' },
-
     ]
   }
 
@@ -105,8 +102,6 @@ export function useMenu() {
     menu,
     fetchCategories,
     fetchItems,
-    search,
     filterItems,
-
   }
 }
