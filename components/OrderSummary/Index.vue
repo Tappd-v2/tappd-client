@@ -6,6 +6,7 @@ import { useOrderStore } from '~/stores/order'
 const orderStore = useOrderStore()
 const config = useRuntimeConfig()
 const stripe = ref(null)
+const orderDetailsVisible = ref(false)
 
 watchEffect(
   () => orderStore.items,
@@ -39,20 +40,16 @@ async function handleCheckout() {
     console.error('Error:', error)
   }
 }
-const orderDetailsVisible = ref(false)
+
 function toggleOrderDetails() {
   orderDetailsVisible.value = !orderDetailsVisible.value
 }
 </script>
 
 <template>
-  <div
-    class="fixed bottom-0 w-full bg-white shadow-lg border-t border-gray-200"
-    @touchstart="onTouchStart"
-    @touchend="onTouchEnd"
-  >
+  <div class="fixed bottom-0 w-full bg-white shadow-lg border-t border-gray-200">
     <button
-      class="w-full py-4 text-center text-lg font-bold"
+      class="w-full pt-4 text-center text-lg font-bold"
       @click="toggleOrderDetails"
     >
       <i
@@ -77,28 +74,10 @@ function toggleOrderDetails() {
         Checkout
       </button>
     </div>
-    <div
-      :class="[
-        orderDetailsVisible ? 'h-auto p-4 border-t border-gray-200' : 'h-0',
-      ]"
-      class="order-details"
-    >
-      <div
-        v-for="item in orderStore.items"
-        :key="item.id"
-        class="flex justify-between items-center py-2"
-      >
-        <p class="text-lg">
-          {{ item.amount }}x {{ item.name }}
-        </p>
-        <button
-          class="text-gray-500"
-          @click="orderStore.removeItem(item.id)"
-        >
-          <i class="fa fa-trash" aria-hidden="true" />
-        </button>
-      </div>
-    </div>
+
+    <OrderSummaryDetails
+      :show-details="orderDetailsVisible"
+    />
   </div>
 </template>
 

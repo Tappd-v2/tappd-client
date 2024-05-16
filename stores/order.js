@@ -1,4 +1,3 @@
-// stores/order.js
 import { defineStore } from 'pinia';
 
 export const useOrderStore = defineStore('order', {
@@ -23,7 +22,6 @@ export const useOrderStore = defineStore('order', {
       } else {
         this.items.push({ ...item});
       }
-      console.log(this.items);
     },
     removeItem(itemId) {
       this.items = this.items.filter(i => i.id !== itemId);

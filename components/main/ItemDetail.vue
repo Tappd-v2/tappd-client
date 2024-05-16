@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-import { useOrderStore } from '~/stores/order' // Ensure the correct path
+import { useOrderStore } from '~/stores/order'
 
 const props = defineProps({
   item: {
@@ -10,7 +10,7 @@ const props = defineProps({
   },
 })
 
-const orderStore = useOrderStore() // Initialize the order store
+const orderStore = useOrderStore()
 
 const amount = ref(1)
 const isVisible = ref(false)

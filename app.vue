@@ -1,19 +1,19 @@
 <script setup>
 const description
-  = 'XXX'
+  = 'Tappd is an online ordering service for restaurants, bars, and cafes.'
 const ogTitle
-  = 'Lukas Olivier - Software Engineering Student'
+  = 'Tappd'
 const twitterDescription
-  = 'XXX'
+  = 'Tappd is an online ordering service for restaurants, bars, and cafes.'
 const image
   = 'https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmVlcnxlbnwwfHwwfHx8MA%3D%3D'
-const mySite = 'XXX'
+const mySite = 'https://tappd-demo.lukasolivier.be'
 
 useHead({
   htmlAttrs: {
-    lang: 'en',
+    lang: 'nl',
   },
-  link: [{ rel: 'canonical', href: '' }],
+  link: [{ rel: 'canonical', href: 'https://tappd-demo.lukasolivier.be' }],
   meta: [
     {
       name: 'description',
