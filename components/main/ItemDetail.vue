@@ -41,8 +41,6 @@ function addToOrder() {
 <template>
   <Sidebar
     v-model:visible="isVisible" position="bottom"
-    style="height: auto"
-    class="fixed bottom-0 w-full bg-white shadow-lg border-t border-gray-200"
   >
     <div class="mx-auto flex flex-col justify-between items-center">
       <div class="flex items-center justify-between w-full pb-6">
