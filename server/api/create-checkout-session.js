@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
     const transformedItems = items.map(item => ({
       price_data: {
-        currency: 'usd',
+        currency: 'eur',
         product_data: {
           name: item.name,
         },

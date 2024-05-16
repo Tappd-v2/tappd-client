@@ -16,6 +16,7 @@ defineProps({
     mx-auto
     gap-5
     overflow-x-auto
+    mb-5
   "
   >
     <li

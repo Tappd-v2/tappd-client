@@ -11,6 +11,14 @@ defineProps({
 })
 
 const selectedItem = ref(null)
+
+function selectItem(item) {
+  selectedItem.value = null // Reset the selectedItem
+  // Use nextTick to ensure the DOM updates before setting the new item
+  nextTick(() => {
+    selectedItem.value = item
+  })
+}
 </script>
 
 <template>
@@ -19,7 +27,9 @@ const selectedItem = ref(null)
     :id="formatName(category.name)"
     :key="category.id"
     class="
-    pt-20 w-11/12
+    w-11/12
+    pt-10
+    pb-5
     mx-auto
     flex
     text-md
@@ -38,7 +48,7 @@ const selectedItem = ref(null)
     <ul
       v-for="product in category.products"
       :key="product.id"
-      @click="selectedItem = product"
+      @click="selectItem(product)"
     >
       <li
         class="border-b py-5"

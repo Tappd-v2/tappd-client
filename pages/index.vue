@@ -22,8 +22,6 @@ useHead({
 onMounted(async () => {
   await fetchCategories()
   await fetchItems()
-  // get the items from the order store
-  console.log(orderStore.items)
 })
 </script>
 
@@ -34,8 +32,6 @@ onMounted(async () => {
     <MainMenu :menu="menu" :store="orderStore" />
     <MainCheckoutButton
       v-if="orderStore.items.length > 0"
-      :total-items="orderStore.items.reduce((acc, item) => acc + item.amount, 0)"
-      :total-price="orderStore.items.reduce((acc, item) => acc + item.price * item.amount, 0)"
     />
     <MainNoResults v-if="!menu.length" />
     <BackToTop />

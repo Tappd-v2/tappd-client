@@ -13,11 +13,17 @@ export const useOrderStore = defineStore('order', {
     },
     itemTotal() {
       return this.items.reduce((acc, item) => acc + item.price * item.amount, 0);
-    }
+    },
   },
   actions: {
     addItem(item) {
-      this.items.push(item);
+      const existingItem = this.items.find(i => i.id === item.id);
+      if (existingItem) {
+        existingItem.amount += item.amount;
+      } else {
+        this.items.push({ ...item});
+      }
+      console.log(this.items);
     },
     removeItem(itemId) {
       this.items = this.items.filter(i => i.id !== itemId);
