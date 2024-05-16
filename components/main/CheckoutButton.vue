@@ -67,7 +67,7 @@ function toggleOrderDetails() {
           Total items: {{ orderStore.itemCount }}
         </p>
         <p class="text-lg font-bold">
-          Total price: ${{ orderStore.itemTotal }}
+          Total price: &#8364;{{ orderStore.itemTotal }}
         </p>
       </div>
       <button
