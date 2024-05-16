@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
     try {
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
+        payment_method_types: ['card', 'bancontact'],
         line_items: transformedItems,
         mode: 'payment',
         success_url: `${process.env.BASE_URL}/success`,
