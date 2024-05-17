@@ -7,6 +7,8 @@ const orderStore = useOrderStore()
 
 const amount = ref(1)
 const isVisible = ref(false)
+const itemAlreadyInOrder = computed(() => orderStore.items.some(item => item.id === orderStore.selectedItem?.id))
+const originalAmount = computed(() => orderStore.items.find(item => item.id === orderStore.selectedItem?.id)?.amount)
 
 function increaseAmount() {
   amount.value++
@@ -23,20 +25,49 @@ watch(() => orderStore.selectedItem, (value) => {
 })
 
 watch(() => orderStore.selectedItem, () => {
-  if (!orderStore.selectedItem)
-    return
-  const item = orderStore.items.find(item => item.id === orderStore.selectedItem.id) // Check if the item is already in the order
-  if (item)
-    amount.value = item.amount // If the item is already in the order, set the amount to the current amount
+  if (itemAlreadyInOrder.value)
+    amount.value = originalAmount.value
   else
-    amount.value = 1 // Otherwise, set the amount to 1
+    amount.value = 1
 })
 
+function handleButtonClick() {
+  if (amount.value === 0 && itemAlreadyInOrder.value)
+    removeFromOrder()
+  else
+    addToOrder()
+}
+
 function addToOrder() {
-  if (orderStore.selectedItem && amount.value > 0)
+  if (amount.value === 0) {
+    isVisible.value = false
+    return
+  }
+  if (itemAlreadyInOrder.value)
+    orderStore.updateItem(orderStore.selectedItem.id, amount.value) // Update item in the order
+  else
     orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }) // Add item to the order
+  isVisible.value = false
+}
+
+function removeFromOrder() {
+  if (orderStore.selectedItem)
+    orderStore.removeItem(orderStore.selectedItem.id) // Remove item from the order
 
   isVisible.value = false
+}
+
+function getButtonLabel(amount) {
+  if (itemAlreadyInOrder.value && amount === 0)
+    return 'Remove from order'
+  else if (itemAlreadyInOrder.value && amount === originalAmount.value)
+    return 'Go back'
+  else if (!itemAlreadyInOrder.value && amount === 0)
+    return 'Cancel'
+  else if (amount > 0 && itemAlreadyInOrder.value)
+    return 'Update order'
+  else
+    return 'Add to order'
 }
 </script>
 
@@ -74,9 +105,9 @@ function addToOrder() {
       <button
         class="text-white px-3 py-3 w-full"
         :class="amount > 0 ? 'bg-blue-500' : 'bg-red-500'"
-        @click="addToOrder"
+        @click="handleButtonClick"
       >
-        {{ amount > 0 ? 'Add to cart' : 'Cancel' }}
+        {{ getButtonLabel(amount) }}
       </button>
     </div>
   </Sidebar>
