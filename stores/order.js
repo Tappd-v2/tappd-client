@@ -4,6 +4,7 @@ export const useOrderStore = defineStore('order', {
   state: () => {
     return {
       items: [],
+      selectedItem: null,
     };
   },
   getters: {
@@ -29,6 +30,12 @@ export const useOrderStore = defineStore('order', {
     clear() {
       this.items = [];
     },
+    setSelectedItem(item) {
+      this.selectedItem = item;
+    },
+    unsetSelectedItem() {
+      this.selectedItem = null;
+    }
   },
   persist: true,  // Enable persistence for this store
 });

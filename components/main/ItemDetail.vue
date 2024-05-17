@@ -3,13 +3,6 @@ import { ref, watch } from 'vue'
 
 import { useOrderStore } from '~/stores/order'
 
-const props = defineProps({
-  item: {
-    type: Object,
-    required: false,
-  },
-})
-
 const orderStore = useOrderStore()
 
 const amount = ref(1)
@@ -24,14 +17,18 @@ function decreaseAmount() {
     amount.value--
 }
 
-watch(() => props.item, (value) => {
+watch(() => orderStore.selectedItem, (value) => {
   if (value)
     isVisible.value = true
 })
 
+watch(() => orderStore.selectedItem, () => {
+  amount.value = 1
+})
+
 function addToOrder() {
-  if (props.item && amount.value > 0)
-    orderStore.addItem({ ...props.item, amount: amount.value }) // Add item to the order
+  if (orderStore.selectedItem && amount.value > 0)
+    orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }) // Add item to the order
 
   amount.value = 1
   isVisible.value = false
@@ -46,10 +43,10 @@ function addToOrder() {
       <div class="flex items-center justify-between w-full pb-6">
         <div>
           <h3 class="text-lg font-bold">
-            {{ item?.name }}
+            {{ orderStore.selectedItem?.name }}
           </h3>
           <p class="text-sm text-gray-500">
-            {{ item?.description }}
+            {{ orderStore.selectedItem?.description }}
           </p>
         </div>
         <div class="flex items-center">

@@ -1,4 +1,6 @@
 <script setup>
+import { useOrderStore } from '~/stores/order'
+
 defineProps({
   menu: {
     type: Array,
@@ -10,13 +12,13 @@ defineProps({
   },
 })
 
-const selectedItem = ref(null)
+const orderStore = useOrderStore()
 
 function selectItem(item) {
-  selectedItem.value = null // Reset the selectedItem
+  orderStore.unsetSelectedItem()
   // Use nextTick to ensure the DOM updates before setting the new item
   nextTick(() => {
-    selectedItem.value = item
+    orderStore.setSelectedItem(item)
   })
 }
 </script>
@@ -45,5 +47,5 @@ function selectItem(item) {
       </li>
     </ul>
   </div>
-  <MainItemDetail :item="selectedItem" :store="store" />
+  <MainItemDetail />
 </template>
