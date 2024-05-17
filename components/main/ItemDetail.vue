@@ -23,14 +23,19 @@ watch(() => orderStore.selectedItem, (value) => {
 })
 
 watch(() => orderStore.selectedItem, () => {
-  amount.value = 1
+  if (!orderStore.selectedItem)
+    return
+  const item = orderStore.items.find(item => item.id === orderStore.selectedItem.id) // Check if the item is already in the order
+  if (item)
+    amount.value = item.amount // If the item is already in the order, set the amount to the current amount
+  else
+    amount.value = 1 // Otherwise, set the amount to 1
 })
 
 function addToOrder() {
   if (orderStore.selectedItem && amount.value > 0)
     orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }) // Add item to the order
 
-  amount.value = 1
   isVisible.value = false
 }
 </script>

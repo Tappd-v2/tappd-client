@@ -10,6 +10,14 @@ defineProps({
 
 const orderStore = useOrderStore()
 
+function selectItem(item) {
+  orderStore.unsetSelectedItem()
+  // Use nextTick to ensure the DOM updates before setting the new item
+  nextTick(() => {
+    orderStore.setSelectedItem(item)
+  })
+}
+
 function removeItem(itemId) {
   // Add removing class before removing from store
   document.getElementById(itemId).classList.add('removing')
@@ -31,7 +39,7 @@ function removeItem(itemId) {
       :id="item.id"
       :key="item.id" class="flex justify-between items-center py-2"
     >
-      <p class="text-lg">
+      <p class="text-lg flex-grow" @click="selectItem(item)">
         {{ item.amount }}x {{ item.name }}
       </p>
       <button
