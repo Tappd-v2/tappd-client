@@ -1,4 +1,3 @@
-// index.vue
 <script setup>
 import { useMenu } from '~/composables/useMenu'
 import { useOrderStore } from '~/stores/order'

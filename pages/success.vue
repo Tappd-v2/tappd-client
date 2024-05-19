@@ -1,6 +1,11 @@
+<script setup>
+import { useOrderStore } from '~/stores/order'
+
+const orderStore = useOrderStore()
+
+orderStore.clear()
+</script>
+
 <template>
-  <div>
-    <h1>Payment Successful!</h1>
-    <p>Thank you for your purchase.</p>
-  </div>
+  <PaymentStatus :cancelled="false" />
 </template>
