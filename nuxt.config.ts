@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
     '@nuxtjs/seo',
+    '@vueuse/motion/nuxt',
     'nuxt-primevue',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt'
