@@ -2,6 +2,24 @@
 defineProps({
   cancelled: Boolean,
 })
+
+const route = useRoute()
+
+const costumerName = ref('...')
+onMounted(async () => {
+  try {
+    const response = await $fetch(`/api/orderDetails?session_id=${route.query.session_id}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+    costumerName.value = response.session.customer_details.name
+  }
+  catch (error) {
+    console.error('Error:', error)
+  }
+},
+)
 </script>
 
 <template>
@@ -12,12 +30,12 @@ defineProps({
       :class="cancelled ? 'text-red-500 fas fa-times' : 'text-green-500 fas fa-check'"
     />
     <h1 class="text-2xl font-bold mt-4">
-      {{ cancelled ? 'Bestelling geannuleerd' : 'Bestelling geplaatst' }}
+      {{ cancelled ? 'Bestelling geannuleerd' : `Bedankt voor uw bestelling ${costumerName}` }}
     </h1>
     <p
       class="text-gray-500 text-center"
     >
-      {{ cancelled ? 'Uw bestelling is geannuleerd. Indien dit een fout is, neem dan contact op met het personeel.' : `Uw bestelling #${$route.query.order_id} is geplaatst.` }}
+      {{ cancelled ? 'Uw bestelling is geannuleerd. Indien dit een fout is, neem dan contact op met het personeel.' : `Uw bestelling is geplaatst.` }}
     </p>
     <div class="mt-20">
       <router-link

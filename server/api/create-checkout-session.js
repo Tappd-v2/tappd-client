@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
         payment_method_types: ['card', 'bancontact'],
         line_items: transformedItems,
         mode: 'payment',
-        success_url: `${process.env.BASE_URL}/success`,
+        success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.BASE_URL}/cancel`,
       })
       return { id: session.id }
@@ -32,6 +32,7 @@ export default defineEventHandler(async (event) => {
       event.res.statusCode = 500
       return { error: err.message }
     }
+
   }
   else {
     event.res.setHeader('Allow', 'POST')
@@ -39,3 +40,4 @@ export default defineEventHandler(async (event) => {
     return { error: 'Method Not Allowed' }
   }
 })
+
