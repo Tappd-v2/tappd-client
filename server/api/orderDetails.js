@@ -3,7 +3,6 @@ import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export default defineEventHandler(async (event) => {
-  console.log('event', event.req.method)
   if (event.req.method === 'GET') {
     try {
       const urlParams = new URLSearchParams(event.req.url.split('?')[1]); // Extract query parameters
