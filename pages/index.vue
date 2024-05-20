@@ -2,7 +2,7 @@
 import { useMenu } from '~/composables/useMenu'
 import { useOrderStore } from '~/stores/order'
 
-const { fetchCategories, fetchItems, menu, filterItems } = useMenu()
+const { fetchData, menu, filterItems } = useMenu()
 
 useHead({
   title: 'Home',
@@ -12,8 +12,7 @@ const orderStore = useOrderStore()
 const isLoading = ref(true)
 
 onMounted(async () => {
-  await fetchCategories()
-  await fetchItems()
+  await fetchData()
   isLoading.value = false
 })
 </script>
