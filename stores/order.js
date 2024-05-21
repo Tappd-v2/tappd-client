@@ -5,6 +5,8 @@ export const useOrderStore = defineStore('order', {
     return {
       items: [],
       selectedItem: null,
+      table: null,
+      remarks: '',
     };
   },
   getters: {
@@ -42,7 +44,13 @@ export const useOrderStore = defineStore('order', {
     },
     unsetSelectedItem() {
       this.selectedItem = null;
-    }
+    },
+    setTable(table) {
+      this.table = table;
+    },
+    setRemarks(remarks) {
+      this.remarks = remarks;
+    },
   },
   persist: true,  // Enable persistence for this store
 });

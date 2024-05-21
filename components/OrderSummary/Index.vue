@@ -3,6 +3,13 @@ import { onMounted, ref } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
 import { useOrderStore } from '~/stores/order'
 
+const props = defineProps({
+  finalStep: {
+    type: Boolean,
+    default: false,
+  },
+})
+const $router = useRouter()
 const orderStore = useOrderStore()
 const config = useRuntimeConfig()
 const stripe = ref(null)
@@ -16,7 +23,15 @@ onMounted(async () => {
   stripe.value = await loadStripe(config.public.stripePublishableKey)
 })
 
-async function handleCheckout() {
+async function handleCheckoutButtonClick() {
+  if (props.finalStep)
+    await createCheckoutSession()
+
+  else
+    $router.push('/checkout')
+}
+
+async function createCheckoutSession() {
   try {
     const response = await $fetch('/api/create-checkout-session', {
       method: 'POST',
@@ -28,6 +43,8 @@ async function handleCheckout() {
             price: item.price,
             quantity: item.amount,
           })),
+          table: orderStore.table,
+          remarks: orderStore.remarks,
         }),
       headers: { 'Content-Type': 'application/json' },
     })
@@ -69,9 +86,9 @@ function toggleOrderDetails() {
       </div>
       <button
         class="bg-blue-500 text-white px-4 py-2 rounded-lg"
-        @click="handleCheckout"
+        @click="handleCheckoutButtonClick"
       >
-        Checkout
+        {{ props.finalStep ? 'Afrekenen' : 'Bestellen' }}
       </button>
     </div>
 

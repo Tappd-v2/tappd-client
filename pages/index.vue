@@ -30,7 +30,7 @@ onMounted(async () => {
       <MainSearch :filter-items="filterItems" />
       <MainCategories :menu="menu" />
       <MainMenu :menu="menu" :store="orderStore" />
-      <OrderSummary v-if="orderStore.items.length > 0" />
+      <OrderSummary v-if="orderStore.items.length > 0" :final-step="false" />
       <MainNoResults v-if="!menu.length" />
     </div>
   </div>

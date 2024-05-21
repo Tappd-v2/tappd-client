@@ -5,11 +5,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 export default defineEventHandler(async (event) => {
   if (event.req.method === 'POST') {
     const body = await readBody(event)
-    const { items } = body
 
     const userId = 1; // TODO: Implement user authentication
 
-    const transformedItems = items.map(item => ({
+    const transformedItems = body.items.map(item => ({
       price_data: {
         currency: 'eur',
         product_data: {
@@ -27,7 +26,9 @@ export default defineEventHandler(async (event) => {
         mode: 'payment',
         success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.BASE_URL}/cancel`,
-        metadata: { userId },
+        metadata: {
+          userId,
+        }
       })
       return { id: session.id }
     }

@@ -26,7 +26,6 @@ export function useMenu() {
     items.value = data.items
     filteredItems.value = data.items
     categories.value = data.categories
-    console.log('Menu:', menu.value)
   }
 
   return {
