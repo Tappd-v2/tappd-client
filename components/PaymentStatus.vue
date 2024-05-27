@@ -16,7 +16,6 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    // GET http:localhost:3030/orders/${route.query.session_id}
     const response = await $fetch(`http://localhost:3030/orders/${route.query.session_id}`)
     costumerName.value = response.customer_details.name
   }
