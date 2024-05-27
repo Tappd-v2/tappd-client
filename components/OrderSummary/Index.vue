@@ -9,6 +9,7 @@ const props = defineProps({
     default: false,
   },
 })
+
 const $router = useRouter()
 const orderStore = useOrderStore()
 const config = useRuntimeConfig()
@@ -27,8 +28,7 @@ async function handleCheckoutButtonClick() {
   if (props.finalStep)
     await createCheckoutSession()
 
-  else
-    $router.push('/checkout')
+  else $router.push('/checkout')
 }
 
 async function createCheckoutSession() {
@@ -84,7 +84,8 @@ function toggleOrderDetails() {
           Total price: &#8364;{{ orderStore.itemTotal }}
         </p>
       </div>
-      <button
+      <Button
+        :disabled="orderStore.itemCount === 0 || orderStore.table === null"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg"
         @click="handleCheckoutButtonClick"
       >
