@@ -1,3 +1,14 @@
+<script setup>
+import { useUserStore } from '~/stores/user'
+
+const userStore = useUserStore()
+const credentials = {
+  email: 'user@example.com',
+  password: 'example',
+}
+userStore.login(credentials)
+</script>
+
 <template>
   <div class="flex flex-col min-h-screen">
     <header>

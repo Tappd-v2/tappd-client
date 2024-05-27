@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
 import { useOrderStore } from '~/stores/order'
+import { useUserStore } from '~/stores/user'
 
 const props = defineProps({
   finalStep: {
@@ -12,6 +13,7 @@ const props = defineProps({
 
 const $router = useRouter()
 const orderStore = useOrderStore()
+const userStore = useUserStore()
 const config = useRuntimeConfig()
 const stripe = ref(null)
 const orderDetailsVisible = ref(false)
@@ -43,8 +45,9 @@ async function createCheckoutSession() {
             price: item.price,
             quantity: item.amount,
           })),
-          table: orderStore.table,
+          tableId: orderStore.table.id,
           remarks: orderStore.remarks,
+          userId: userStore.user.id,
         }),
       headers: { 'Content-Type': 'application/json' },
     })
@@ -85,7 +88,7 @@ function toggleOrderDetails() {
         </p>
       </div>
       <Button
-        :disabled="orderStore.itemCount === 0 || orderStore.table === null"
+        :disabled="(orderStore.itemCount === 0 || orderStore.table === null) && props.finalStep"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg"
         @click="handleCheckoutButtonClick"
       >
