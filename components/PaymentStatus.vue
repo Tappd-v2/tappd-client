@@ -39,12 +39,13 @@ async function getCostumerName() {
     </p>
     <div class="mt-20 w-full">
       <a
-        :href="orderDetails.receipt_url"
-        target="_blank"
+        :href="cancelled ? '/call-staff' : orderDetails.receipt_url"
+        :target="cancelled ? '_self' : '_blank'"
         class="bg-gray-300  px-4 py-2 text-center rounded-lg block"
       >
-        {{ 'Ontvangstbewijs bekijken' }}
+        {{ cancelled ? 'Neem contact op' : 'Ontvangsbewijs bekijken' }}
       </a>
+
       <router-link to="/" class="block  text-center bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">
         Terug naar menu
       </router-link>
