@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useOrderStore } from '~/stores/order'
 
 const orderStore = useOrderStore()
@@ -11,9 +11,14 @@ onMounted(() => {
 })
 
 async function getTables() {
-  const response = await fetch('/api/tables')
-  const data = await response.json()
-  tables.value = data
+  try {
+    const response = await fetch('http://localhost:3030/tables')
+    const data = await response.json()
+    tables.value = data
+  }
+  catch (error) {
+    console.error(error)
+  }
 }
 
 const fullOrder = ref({

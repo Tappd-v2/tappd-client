@@ -33,7 +33,7 @@ async function handleCheckoutButtonClick() {
 
 async function createCheckoutSession() {
   try {
-    const response = await $fetch('/api/create-checkout-session', {
+    const response = await $fetch('http://localhost:3030/checkout', {
       method: 'POST',
       body: JSON.stringify(
         {

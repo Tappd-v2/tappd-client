@@ -16,11 +16,9 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    const response = await $fetch(`/api/orderDetails?session_id=${route.query.session_id}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-    costumerName.value = response.session.customer_details.name
+    // GET http:localhost:3030/orders/${route.query.session_id}
+    const response = await $fetch(`http://localhost:3030/orders/${route.query.session_id}`)
+    costumerName.value = response.customer_details.name
   }
   catch (error) {
     console.error('Error fetching customer name:', error)
@@ -35,7 +33,7 @@ async function getCostumerName() {
       class="text-7xl"
       :class="cancelled ? 'text-red-500 fas fa-times' : 'text-green-500 fas fa-check'"
     />
-    <h1 class="text-2xl font-bold mt-4">
+    <h1 class="text-2xl font-bold mt-4 w-11/12 mx-auto text-center">
       {{ cancelled ? 'Bestelling geannuleerd' : `Bedankt voor uw bestelling ${costumerName}` }}
     </h1>
     <p class="text-gray-500 text-center">

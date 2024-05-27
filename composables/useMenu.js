@@ -21,11 +21,18 @@ export function useMenu() {
   }
 
   const fetchData = async () => {
-    const response = await fetch('/api/menu')
-    const data = await response.json()
-    items.value = data.items
-    filteredItems.value = data.items
-    categories.value = data.categories
+    await Promise.all([fetchItems(), fetchCategories()])
+    filteredItems.value = items.value
+  }
+
+  const fetchItems = async () => {
+    const response = await fetch('http://localhost:3030/items')
+    items.value = await response.json()
+  }
+
+  const fetchCategories = async () => {
+    const response = await fetch('http://localhost:3030/categories')
+    categories.value = await response.json()
   }
 
   return {

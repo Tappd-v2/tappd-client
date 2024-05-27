@@ -5,6 +5,10 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-16',
       viewport: 'width=device-width,initial-scale=1',
+      link: [
+        { rel: 'preload', href: 'https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Staatliches&family=Lato:wght@700&display=swap', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" },
+        { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'},
+      ],
     },
   },
 
@@ -19,6 +23,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      apiBaseUrl: process.env.API_BASE_URL,
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
     },
   },
