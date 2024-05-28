@@ -24,7 +24,7 @@ async function getTables() {
 <template>
   <div class=" w-9/12 mx-auto">
     <h1 class="text-2xl font-bold mt-10 ">
-      Checkout
+      Uitchecken
     </h1>
     <div class="separator bg-gray-300 w-full my-3" />
     <div class="my-10">

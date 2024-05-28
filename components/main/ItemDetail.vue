@@ -59,15 +59,15 @@ function removeFromOrder() {
 
 function getButtonLabel(amount) {
   if (itemAlreadyInOrder.value && amount === 0)
-    return 'Remove from order'
+    return 'Verwijderen uit bestelling'
   else if (itemAlreadyInOrder.value && amount === originalAmount.value)
-    return 'Go back'
+    return  'Terug'
   else if (!itemAlreadyInOrder.value && amount === 0)
-    return 'Cancel'
+    return 'Annuleren'
   else if (amount > 0 && itemAlreadyInOrder.value)
-    return 'Update order'
+    return 'Bestelling bijwerken'
   else
-    return 'Add to order'
+    return 'Toevoegen aan bestelling'
 }
 </script>
 
