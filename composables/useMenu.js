@@ -1,6 +1,8 @@
+import { useRuntimeConfig } from 'nuxt/app'
 import { computed, ref } from 'vue'
 
 export function useMenu() {
+  const config = useRuntimeConfig()
   const items = ref([])
   const categories = ref([])
   const filteredItems = ref([])
@@ -26,12 +28,12 @@ export function useMenu() {
   }
 
   const fetchItems = async () => {
-    const response = await fetch('http://localhost:3030/items')
+    const response = await fetch(`${config.public.apiBaseUrl}/items`)
     items.value = await response.json()
   }
 
   const fetchCategories = async () => {
-    const response = await fetch('http://localhost:3030/categories')
+    const response = await fetch(`${config.public.apiBaseUrl}/categories`)
     categories.value = await response.json()
   }
 

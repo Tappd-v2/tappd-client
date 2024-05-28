@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useApi } from '~/composables/useApi'
 
 const props = defineProps({
   cancelled: Boolean,
 })
-
+const { apiGet } = useApi()
 const route = useRoute()
 const orderDetails = ref('...')
 
@@ -16,7 +17,7 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    orderDetails.value = await $fetch(`http://localhost:3030/orders/${route.query.session_id}`)
+    orderDetails.value = await apiGet(`orders/${route.query.session_id}`)
   }
   catch (error) {
     console.error('Error fetching customer name:', error)

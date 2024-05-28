@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
 import { useOrderStore } from '~/stores/order'
 import { useUserStore } from '~/stores/user'
+import { useApi } from '~/composables/useApi'
 
 const props = defineProps({
   finalStep: {
@@ -11,6 +12,7 @@ const props = defineProps({
   },
 })
 
+const { apiPost } = useApi()
 const $router = useRouter()
 const orderStore = useOrderStore()
 const userStore = useUserStore()
@@ -35,22 +37,18 @@ async function handleCheckoutButtonClick() {
 
 async function createCheckoutSession() {
   try {
-    const response = await $fetch('http://localhost:3030/checkout', {
-      method: 'POST',
-      body: JSON.stringify(
-        {
-          items: orderStore.items.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.amount,
-          })),
-          tableId: orderStore.table.id,
-          remarks: orderStore.remarks,
-          userId: userStore.user.id,
-        }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+    const data = {
+      items: orderStore.items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.amount,
+      })),
+      tableId: orderStore.table.id,
+      remarks: orderStore.remarks,
+      userId: userStore.user.id,
+    }
+    const response = await apiPost('checkout', data)
     const sessionId = response.id
     const result = await stripe.value.redirectToCheckout({ sessionId })
     if (result.error)
