@@ -9,7 +9,7 @@ export function useMenu() {
   const menu = computed(() => {
     return categories.value
       .map((category) => {
-        const products = filteredItems.value.filter(item => item.category_id === category.id)
+        const products = filteredItems.value.filter(item => item.categoryId === category.id)
         return {
           ...category,
           products,

@@ -9,6 +9,7 @@ const props = defineProps({
 const { apiGet } = useApi()
 const route = useRoute()
 const orderDetails = ref('...')
+const userDetails = ref('...')
 
 onMounted(async () => {
   if (!props.cancelled)
@@ -17,7 +18,9 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    orderDetails.value = await apiGet(`orders/${route.query.session_id}`)
+    const res = await apiGet(`orders/${route.query.session_id}`)
+    orderDetails.value = res.orders
+    userDetails.value = res.users
   }
   catch (error) {
     console.error('Error fetching customer name:', error)
@@ -33,14 +36,14 @@ async function getCostumerName() {
       :class="cancelled ? 'text-red-500 fas fa-times' : 'text-green-500 fas fa-check'"
     />
     <h1 class="text-2xl font-bold mt-4  text-center">
-      {{ cancelled ? 'Bestelling geannuleerd' : `Bedankt voor uw bestelling ${orderDetails.username ? orderDetails.username : '...'}` }}
+      {{ cancelled ? 'Bestelling geannuleerd' : `Bedankt voor uw bestelling ${userDetails ? userDetails.username : '...'}` }}
     </h1>
     <p class="text-gray-500 text-center">
       {{ cancelled ? 'Uw bestelling is geannuleerd. Indien dit een fout is, neem dan contact op met het personeel.' : 'Uw bestelling is geplaatst.' }}
     </p>
     <div class="mt-20 w-full">
       <a
-        :href="cancelled ? '/call-staff' : orderDetails.receipt_url"
+        :href="cancelled ? '/call-staff' : orderDetails.receiptUrl"
         :target="cancelled ? '_self' : '_blank'"
         class="bg-gray-300  px-4 py-2 text-center rounded-lg block"
       >

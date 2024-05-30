@@ -7,6 +7,7 @@ const orderStore = useOrderStore()
 
 const amount = ref(1)
 const isVisible = ref(false)
+
 const itemAlreadyInOrder = computed(() => orderStore.items.some(item => item.id === orderStore.selectedItem?.id))
 const originalAmount = computed(() => orderStore.items.find(item => item.id === orderStore.selectedItem?.id)?.amount)
 
