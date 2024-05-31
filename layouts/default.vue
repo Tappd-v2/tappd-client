@@ -15,24 +15,22 @@ const credentials = {
 userStore.login(credentials)
 
 onMounted(async () => {
-  const location = await apiGet(`locations/${route.params.location}`)
-  if (!location)
-    await navigateTo('/404')
-
-  orderStore.setLocation(location)
-  console.log('Location:', orderStore.location)
+  getLocation(route.params.location)
 })
 
 watch(() => route.params.location, async (location) => {
+  getLocation(location)
+})
+
+async function getLocation(location) {
   if (location) {
-    const location = await apiGet(`locations/${route.params.location}`)
+    const location = await apiGet(`locations/${location}`)
     if (!location)
       await navigateTo('/404')
 
     orderStore.setLocation(location)
-    console.log('Location:', orderStore.location)
   }
-})
+}
 </script>
 
 <template>
