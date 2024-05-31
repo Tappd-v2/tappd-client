@@ -32,7 +32,7 @@ async function handleCheckoutButtonClick() {
   if (props.finalStep)
     await createCheckoutSession()
 
-  else $router.push('/checkout')
+  else $router.push(`/venues/${orderStore.location.id}/checkout`)
 }
 
 async function createCheckoutSession() {
@@ -47,6 +47,7 @@ async function createCheckoutSession() {
       tableId: orderStore.table.id,
       remarks: orderStore.remarks,
       userId: userStore.user.id,
+      location: orderStore.location,
     }
     const response = await apiPost('checkout', data)
     const sessionId = response.id

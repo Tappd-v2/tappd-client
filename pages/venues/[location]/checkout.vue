@@ -6,6 +6,7 @@ import { useApi } from '~/composables/useApi'
 const orderStore = useOrderStore()
 const { apiGet } = useApi()
 const tables = ref([])
+const route = useRoute()
 
 onMounted(() => {
   getTables()
@@ -13,7 +14,7 @@ onMounted(() => {
 
 async function getTables() {
   try {
-    tables.value = await apiGet('tables')
+    tables.value = await apiGet('tables', route.params.location)
   }
   catch (error) {
     console.error(error)
@@ -23,10 +24,7 @@ async function getTables() {
 
 <template>
   <div class=" w-9/12 mx-auto">
-    <h1 class="text-2xl font-bold mt-10 ">
-      Uitchecken
-    </h1>
-    <div class="separator bg-gray-300 w-full my-3" />
+    <MainTitle title="Bestelling afronden" />
     <div class="my-10">
       <FloatLabel class="w-full md:w-14rem">
         <Dropdown v-model="orderStore.table" input-id="dd-table" :options="tables" option-label="name" class="w-full text-black" />
@@ -39,16 +37,13 @@ async function getTables() {
         <label>Andere opmerkingen</label>
       </FloatLabel>
     </div>
-    <NuxtLink to="/" class="bg-gray-200 text-center py-2 px-5 rounded  block">
+    <NuxtLink
+      :to="`/venues/${route.params.location}/menu`"
+      class="bg-gray-200 text-center py-2 px-5 rounded  block"
+    >
       Terug naar menu
     </NuxtLink>
   </div>
   <OrderSummary :final-step="true" />
   <MainItemDetail />
 </template>
-
-<style scoped>
-.separator {
-  height: 1px;
-}
-</style>

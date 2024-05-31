@@ -1,3 +1,19 @@
+<script setup>
+import { useOrderStore } from '~/stores/order'
+
+const orderStore = useOrderStore()
+
+const locationName = ref('')
+
+onMounted(() => {
+  locationName.value = orderStore.location ? orderStore.location.name : 'Locatie niet gevonden'
+})
+
+watch(() => orderStore.location, () => {
+  locationName.value = orderStore.location ? orderStore.location.name : 'Locatie niet gevonden'
+})
+</script>
+
 <template>
   <div class="hero">
     <div class="text-center">
@@ -7,7 +23,7 @@
       text-center
     "
       >
-        Tappd
+        Tappd - {{ locationName }}
       </h1>
       <p class="text-xl">
         Because you deserve a drink

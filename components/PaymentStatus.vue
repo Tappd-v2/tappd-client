@@ -2,10 +2,12 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApi } from '~/composables/useApi'
+import { useOrderStore } from '~/stores/order'
 
 const props = defineProps({
   cancelled: Boolean,
 })
+const orderStore = useOrderStore()
 const { apiGet } = useApi()
 const route = useRoute()
 const orderDetails = ref('...')
@@ -18,7 +20,7 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    const res = await apiGet(`orders/${route.query.session_id}`)
+    const res = await apiGet(`orders/${route.query.session_id}`, route.params.location)
     orderDetails.value = res.orders
     userDetails.value = res.users
   }
@@ -43,14 +45,17 @@ async function getCostumerName() {
     </p>
     <div class="mt-20 w-full">
       <a
-        :href="cancelled ? '/call-staff' : orderDetails.receiptUrl"
+        :href="cancelled ? `/venues/${orderStore.location.id}/call-staff` : orderDetails.receiptUrl"
         :target="cancelled ? '_self' : '_blank'"
         class="bg-gray-300  px-4 py-2 text-center rounded-lg block"
       >
         {{ cancelled ? 'Neem contact op' : 'Ontvangsbewijs bekijken' }}
       </a>
 
-      <router-link to="/" class="block  text-center bg-blue-500 text-white px-4 py-2 rounded-lg mt-4">
+      <router-link
+        :to="`/${orderStore.location}/call`"
+        class="block  text-center bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
+      >
         Terug naar menu
       </router-link>
     </div>

@@ -35,14 +35,14 @@ function selectItem(item) {
     </h3>
 
     <ul
-      v-for="product in category.products"
-      :key="product.id"
-      @click="selectItem(product)"
+      v-for="items in category.items"
+      :key="items.id"
+      @click="selectItem(items)"
     >
       <li class="border-b py-5">
         <div class="flex justify-between">
-          <span>{{ product.name }}</span>
-          <span>&#8364;{{ product.price }}</span>
+          <span>{{ items.name }}</span>
+          <span>&#8364;{{ items.price }}</span>
         </div>
       </li>
     </ul>
