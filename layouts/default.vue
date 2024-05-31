@@ -11,7 +11,15 @@ const credentials = {
   email: 'user@example.com',
   password: 'example',
 }
+async function getLocation(locationId) {
+  if (locationId) {
+    const location = await apiGet(`locations/${locationId}`)
+    if (!location)
+      await navigateTo('/404')
 
+    orderStore.setLocation(location)
+  }
+}
 userStore.login(credentials)
 
 onMounted(async () => {
@@ -21,16 +29,6 @@ onMounted(async () => {
 watch(() => route.params.location, async (location) => {
   getLocation(location)
 })
-
-async function getLocation(location) {
-  if (location) {
-    const location = await apiGet(`locations/${location}`)
-    if (!location)
-      await navigateTo('/404')
-
-    orderStore.setLocation(location)
-  }
-}
 </script>
 
 <template>
