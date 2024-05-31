@@ -53,7 +53,7 @@ export const useOrderStore = defineStore('order', {
       this.remarks = remarks;
     },
     setLocation(location) {
-      if (location.id !== this.location.id) {
+      if (location.id !== this.location?.id) {
         this.reset();
       }
       this.location = location;
