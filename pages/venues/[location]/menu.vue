@@ -4,17 +4,21 @@ import { useOrderStore } from '~/stores/order'
 
 const { fetchData, menu, filterItems } = useMenu()
 
-useHead({
-  title: 'Home',
-})
-
 const orderStore = useOrderStore()
 const isLoading = ref(true)
+const pageTitle = ref('Menu')
 
 watch(async () => {
   await fetchData(orderStore.location?.id)
+  pageTitle.value = `${orderStore.location?.name} Menu`
   isLoading.value = false
 })
+
+
+useHead({
+  title: pageTitle
+})
+
 </script>
 
 <template>

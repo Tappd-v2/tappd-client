@@ -1,6 +1,7 @@
 <script setup>
 import { useUserStore } from '~/stores/user'
 import { useApi } from '~/composables/useApi'
+import { useOrderStore } from '~/stores/order'
 
 const { apiGet } = useApi()
 const route = useRoute()
@@ -10,10 +11,11 @@ const credentials = {
   email: 'user@example.com',
   password: 'example',
 }
+
 userStore.login(credentials)
 
-onMounted(async () => {
-  if (route.params.location) {
+watch(() => route.params.location, async (location) => {
+  if (location) {
     const location = await apiGet(`locations/${route.params.location}`)
     if (!location)
       await navigateTo('/404')

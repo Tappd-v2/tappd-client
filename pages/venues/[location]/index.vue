@@ -1,9 +1,8 @@
 <script setup>
 import { useOrderStore } from '~/stores/order'
-import { useApi } from '~/composables/useApi'
 
 const orderStore = useOrderStore()
-const title = ref('')
+const location = ref('')
 const route = useRoute()
 
 watch(
@@ -11,14 +10,18 @@ watch(
   async (location) => {
     if (!location)
       return
-    title.value = location.name
+    location.value = location.name
   },
 )
+
+useHead({
+  title: 'Welcome',
+})
 </script>
 
 <template>
   <section class="w-9/12 mx-auto">
-    <MainTitle :title="title" />
+    <MainTitle :title="location" />
 
     <div class="flex flex-col justify-center items-center w-full mt-32 gap-10">
       <NuxtLink
