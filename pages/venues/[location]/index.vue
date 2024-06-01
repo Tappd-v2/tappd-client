@@ -2,26 +2,21 @@
 import { useOrderStore } from '~/stores/order'
 
 const orderStore = useOrderStore()
-const location = ref('')
+const title = ref('')
 const route = useRoute()
-
-watch(
-  () => orderStore.location,
-  async (location) => {
-    if (!location)
-      return
-    location.value = location.name
-  },
-)
 
 useHead({
   title: 'Welcome',
+})
+
+onMounted(() => {
+  title.value = `Welkom bij ${orderStore.location.name}`
 })
 </script>
 
 <template>
   <section class="w-9/12 mx-auto">
-    <MainTitle :title="location" />
+    <MainTitle :title="title" />
 
     <div class="flex flex-col justify-center items-center w-full mt-32 gap-10">
       <NuxtLink

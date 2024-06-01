@@ -15,8 +15,7 @@ export function useApi() {
   }
   const apiPost = async (endpoint, data, locationId = null) => {
     try{
-      const url = locationId ? `${config.public.apiBaseUrl}${locationId}/${endpoint}` : `${config.public.apiBaseUrl}/${endpoint}`
-
+      const url = locationId ? `${config.public.apiBaseUrl}/${locationId}/${endpoint}` : `${config.public.apiBaseUrl}/${endpoint}`
       const response = await fetch( url, {
         method: 'POST',
         headers: {
@@ -24,6 +23,9 @@ export function useApi() {
         },
         body: JSON.stringify(data),
       })
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       return await response.json()
     } catch (error) {
       console.error(`Error posting to ${endpoint}`, error)

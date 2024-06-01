@@ -31,7 +31,6 @@ export const useOrderStore = defineStore('order', {
       this.items = this.items.filter(i => i.id !== itemId);
     },
     updateItem( id, amount ) {
-      console.log('updateItem', id, amount);
       const item = this.items.find(i => i.id === id);
       if (item) {
         item.amount = amount;

@@ -47,9 +47,9 @@ async function createCheckoutSession() {
       tableId: orderStore.table.id,
       remarks: orderStore.remarks,
       userId: userStore.user.id,
-      location: orderStore.location,
+      location: orderStore.location.id,
     }
-    const response = await apiPost('checkout', data)
+    const response = await apiPost('checkout', data, orderStore.location.id)
     const sessionId = response.id
     const result = await stripe.value.redirectToCheckout({ sessionId })
     if (result.error)
@@ -63,6 +63,10 @@ async function createCheckoutSession() {
 function toggleOrderDetails() {
   orderDetailsVisible.value = !orderDetailsVisible.value
 }
+
+const isBtnDisabled = computed(() => {
+  return (orderStore.itemCount === 0 || orderStore.table === null) && props.finalStep
+})
 </script>
 
 <template>
@@ -87,7 +91,7 @@ function toggleOrderDetails() {
         </p>
       </div>
       <Button
-        :disabled="(orderStore.itemCount === 0 || orderStore.table === null) && props.finalStep"
+        :disabled="isBtnDisabled"
         class="bg-blue-500 text-white px-4 py-2 rounded-lg"
         @click="handleCheckoutButtonClick"
       >

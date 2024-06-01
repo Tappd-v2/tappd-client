@@ -1,35 +1,16 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useOrderStore } from '~/stores/order'
-import { useApi } from '~/composables/useApi'
 
 const orderStore = useOrderStore()
-const { apiGet } = useApi()
-const tables = ref([])
 const route = useRoute()
-
-onMounted(() => {
-  getTables()
-})
-
-async function getTables() {
-  try {
-    tables.value = await apiGet('tables', route.params.location)
-  }
-  catch (error) {
-    console.error(error)
-  }
-}
 </script>
 
 <template>
   <div class=" w-9/12 mx-auto">
     <MainTitle title="Bestelling afronden" />
     <div class="my-10">
-      <FloatLabel class="w-full md:w-14rem">
-        <Dropdown v-model="orderStore.table" input-id="dd-table" :options="tables" option-label="name" class="w-full text-black" />
-        <label for="dd-table">Tafel</label>
-      </FloatLabel>
+      <FormTablePicker />
     </div>
     <div class="my-10">
       <FloatLabel>

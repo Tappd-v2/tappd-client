@@ -20,7 +20,7 @@ onMounted(async () => {
 
 async function getCostumerName() {
   try {
-    const res = await apiGet(`orders/${route.query.session_id}`, route.params.location)
+    const res = await apiGet(`orders/${route.query.session_id}`)
     orderDetails.value = res.orders
     userDetails.value = res.users
   }
@@ -53,7 +53,7 @@ async function getCostumerName() {
       </a>
 
       <router-link
-        :to="`/${orderStore.location}/call`"
+        :to="`/venues/${orderStore.location.id}/menu`"
         class="block  text-center bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
       >
         Terug naar menu
