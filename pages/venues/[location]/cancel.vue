@@ -1,3 +1,3 @@
 <template>
-  <PaymentStatus :cancelled="true" />
+   <PaymentStatus :cancelled="true" />
 </template>

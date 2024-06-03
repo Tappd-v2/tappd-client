@@ -1,54 +1,31 @@
 <script setup>
 defineProps({
-  menu: {
-    type: Array,
-    required: true,
-  },
-})
+   menu: {
+      type: Array,
+      required: true,
+   },
+});
 </script>
 
 <template>
-  <ul
-    class="
-    flex
-    mt-5
-    w-11/12
-    mx-auto
-    gap-5
-    overflow-x-auto
-    mb-5
-  "
-  >
-    <li
-      v-for="category in menu"
-      :key="category.id"
-    >
-      <a
-        class="
-        inline-block
-        whitespace-nowrap
-        bg-blue-500
-        text-white
-        rounded-lg
-        text-sm
-        px-4
-        py-2
-        cursor-pointer
-        hover:bg-blue-600"
-        :href="`#${formatName(category.name)}`"
-      >
-        {{ category.name }}
-      </a>
-    </li>
-  </ul>
+   <ul class="mx-auto mb-5 mt-5 flex w-11/12 gap-5 overflow-x-auto">
+      <li v-for="category in menu" :key="category.id">
+         <a
+            class="inline-block cursor-pointer whitespace-nowrap rounded-lg bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600"
+            :href="`#${formatName(category.name)}`"
+         >
+            {{ category.name }}
+         </a>
+      </li>
+   </ul>
 </template>
 
 <style scoped>
 ::-webkit-scrollbar {
-  display: none;
+   display: none;
 }
 
 * {
-  scrollbar-width: none;
+   scrollbar-width: none;
 }
 </style>

@@ -1,11 +1,11 @@
 <script setup>
-import { useOrderStore } from '~/stores/order'
+import { useOrderStore } from "~/stores/order";
 
-const orderStore = useOrderStore()
+const orderStore = useOrderStore();
 
-orderStore.clear()
+orderStore.clear();
 </script>
 
 <template>
-  <PaymentStatus :cancelled="false" />
+   <PaymentStatus :cancelled="false" />
 </template>

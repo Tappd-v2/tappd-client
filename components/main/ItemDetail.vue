@@ -1,115 +1,117 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from "vue";
 
-import { useOrderStore } from '~/stores/order'
+import { useOrderStore } from "~/stores/order";
 
-const orderStore = useOrderStore()
+const orderStore = useOrderStore();
 
-const amount = ref(1)
-const isVisible = ref(false)
+const amount = ref(1);
+const isVisible = ref(false);
 
-const itemAlreadyInOrder = computed(() => orderStore.items.some(item => item.id === orderStore.selectedItem?.id))
-const originalAmount = computed(() => orderStore.items.find(item => item.id === orderStore.selectedItem?.id)?.amount)
+const itemAlreadyInOrder = computed(() =>
+   orderStore.items.some((item) => item.id === orderStore.selectedItem?.id),
+);
+const originalAmount = computed(
+   () =>
+      orderStore.items.find((item) => item.id === orderStore.selectedItem?.id)
+         ?.amount,
+);
 
 function increaseAmount() {
-  amount.value++
+   amount.value++;
 }
 
 function decreaseAmount() {
-  if (amount.value > 0)
-    amount.value--
+   if (amount.value > 0) amount.value--;
 }
 
-watch(() => orderStore.selectedItem, (value) => {
-  if (value)
-    isVisible.value = true
-})
+watch(
+   () => orderStore.selectedItem,
+   (value) => {
+      if (value) isVisible.value = true;
+   },
+);
 
-watch(() => orderStore.selectedItem, () => {
-  if (itemAlreadyInOrder.value)
-    amount.value = originalAmount.value
-  else
-    amount.value = 1
-})
+watch(
+   () => orderStore.selectedItem,
+   () => {
+      if (itemAlreadyInOrder.value) amount.value = originalAmount.value;
+      else amount.value = 1;
+   },
+);
 
 function handleButtonClick() {
-  if (amount.value === 0 && itemAlreadyInOrder.value)
-    removeFromOrder()
-  else
-    addToOrder()
+   if (amount.value === 0 && itemAlreadyInOrder.value) removeFromOrder();
+   else addToOrder();
 }
 
 function addToOrder() {
-  if (amount.value === 0) {
-    isVisible.value = false
-    return
-  }
-  if (itemAlreadyInOrder.value)
-    orderStore.updateItem(orderStore.selectedItem.id, amount.value) // Update item in the order
-  else
-    orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }) // Add item to the order
-  isVisible.value = false
+   if (amount.value === 0) {
+      isVisible.value = false;
+      return;
+   }
+   if (itemAlreadyInOrder.value)
+      orderStore.updateItem(orderStore.selectedItem.id, amount.value); // Update item in the order
+   else
+      orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }); // Add item to the order
+   isVisible.value = false;
 }
 
 function removeFromOrder() {
-  if (orderStore.selectedItem)
-    orderStore.removeItem(orderStore.selectedItem.id) // Remove item from the order
+   if (orderStore.selectedItem)
+      orderStore.removeItem(orderStore.selectedItem.id); // Remove item from the order
 
-  isVisible.value = false
+   isVisible.value = false;
 }
 
 function getButtonLabel(amount) {
-  if (itemAlreadyInOrder.value && amount === 0)
-    return 'Verwijderen uit bestelling'
-  else if (itemAlreadyInOrder.value && amount === originalAmount.value)
-    return  'Terug'
-  else if (!itemAlreadyInOrder.value && amount === 0)
-    return 'Annuleren'
-  else if (amount > 0 && itemAlreadyInOrder.value)
-    return 'Bestelling bijwerken'
-  else
-    return 'Toevoegen aan bestelling'
+   if (itemAlreadyInOrder.value && amount === 0)
+      return "Verwijderen uit bestelling";
+   else if (itemAlreadyInOrder.value && amount === originalAmount.value)
+      return "Terug";
+   else if (!itemAlreadyInOrder.value && amount === 0) return "Annuleren";
+   else if (amount > 0 && itemAlreadyInOrder.value)
+      return "Bestelling bijwerken";
+   else return "Toevoegen aan bestelling";
 }
 </script>
 
 <template>
-  <Sidebar
-    v-model:visible="isVisible" position="bottom"
-  >
-    <div class="mx-auto flex flex-col justify-between items-center">
-      <div class="flex items-center justify-between w-full pb-6">
-        <div>
-          <h3 class="text-lg font-bold">
-            {{ orderStore.selectedItem?.name }}
-          </h3>
-          <p class="text-sm text-gray-500">
-            {{ orderStore.selectedItem?.description }}
-          </p>
-        </div>
-        <div class="flex items-center">
-          <button
-            class="bg-blue-500 text-white px-3 py-2 rounded-lg"
-            @click="decreaseAmount"
-          >
-            <i class="fas fa-minus" />
-          </button>
-          <span class="mx-3 text-xl">{{ amount }}</span>
-          <button
-            class="bg-blue-500 text-white px-3 py-2 rounded-lg"
-            @click="increaseAmount"
-          >
-            +
-          </button>
-        </div>
-      </div>
+   <Sidebar v-model:visible="isVisible" position="bottom">
+      <div class="mx-auto flex flex-col items-center justify-between">
+         <div class="flex w-full items-center justify-between pb-6">
+            <div>
+               <h3 class="text-lg font-bold">
+                  {{ orderStore.selectedItem?.name }}
+               </h3>
+               <p class="text-sm text-gray-500">
+                  {{ orderStore.selectedItem?.description }}
+               </p>
+            </div>
+            <div class="flex items-center">
+               <button
+                  class="rounded-lg bg-blue-500 px-3 py-2 text-white"
+                  @click="decreaseAmount"
+               >
+                  <i class="fas fa-minus" />
+               </button>
+               <span class="mx-3 text-xl">{{ amount }}</span>
+               <button
+                  class="rounded-lg bg-blue-500 px-3 py-2 text-white"
+                  @click="increaseAmount"
+               >
+                  +
+               </button>
+            </div>
+         </div>
 
-      <button
-        class="text-white px-3 py-3 w-full"
-        :class="amount > 0 ? 'bg-blue-500' : 'bg-red-500'"
-        @click="handleButtonClick"
-      >
-        {{ getButtonLabel(amount) }}
-      </button>
-    </div>
-  </Sidebar>
+         <button
+            class="w-full px-3 py-3 text-white"
+            :class="amount > 0 ? 'bg-blue-500' : 'bg-red-500'"
+            @click="handleButtonClick"
+         >
+            {{ getButtonLabel(amount) }}
+         </button>
+      </div>
+   </Sidebar>
 </template>
