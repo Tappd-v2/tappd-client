@@ -37,10 +37,6 @@ export default defineNuxtConfig({
       },
    },
 
-   primevue: {
-      importPT: { from: "~/presets/lara" },
-   },
-
    css: [
       "~/assets/css/tailwind.css",
       "primeicons/primeicons.css",
