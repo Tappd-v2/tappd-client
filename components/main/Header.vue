@@ -1,31 +1,34 @@
 <script setup>
-import { useOrderStore } from "~/stores/order";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { useApi } from "~/composables/useApi";
 
-const orderStore = useOrderStore();
+const route = useRoute();
+const { getLocationName } = useApi();
+const title = ref("");
 
-const locationName = ref("");
+async function getTitle()  {
+   if (route.path === "/") return "Tappd";
+   return `Tappd - ${await getLocationName(route.params.location)}`;
+}
 
-onMounted(() => {
-   locationName.value = orderStore.location
-      ? orderStore.location.name
-      : "Locatie niet gevonden";
+onMounted( async () => {
+   title.value = await getTitle();
 });
 
 watch(
-   () => orderStore.location,
-   () => {
-      locationName.value = orderStore.location
-         ? orderStore.location.name
-         : "Locatie niet gevonden";
-   },
+   () => route.params.location,
+   async () => {
+      title.value = await getTitle();
+   }
 );
 </script>
 
 <template>
    <div class="hero">
       <div class="text-center">
-         <h1 class="text-center text-5xl">Tappd - {{ locationName }}</h1>
-         <p class="text-xl">Because you deserve a drink</p>
+         <h1 class="text-center text-5xl"> {{ title }}</h1>
+         <p class="text-xl">Eenvoudig Bestellen</p>
       </div>
    </div>
 </template>

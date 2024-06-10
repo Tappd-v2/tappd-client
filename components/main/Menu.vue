@@ -39,7 +39,7 @@ function selectItem(item) {
          :key="items.id"
          @click="selectItem(items)"
       >
-         <li class="border-b py-5">
+         <li class="border-b py-5 hover:cursor-pointer hover:font-medium">
             <div class="flex justify-between">
                <span>{{ items.name }}</span>
                <span>&#8364;{{ items.price }}</span>

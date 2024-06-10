@@ -1,17 +1,26 @@
 <script setup>
 import { useOrderStore } from "~/stores/order";
+import { useApi } from "~/composables/useApi";
 
 const orderStore = useOrderStore();
 const title = ref("");
 const route = useRoute();
+const { getLocationName } = useApi();
 
 useHead({
    title: "Welcome",
 });
 
-onMounted(() => {
-   title.value = `Welkom bij ${orderStore.location.name}`;
+onMounted(async () => {
+   title.value = `Welkom bij ${await getLocationName(route.params.location)}`;
 });
+
+watch(
+   () => route.params.location,
+   async () => {
+      title.value = `Welkom bij ${await getLocationName(route.params.location)}`;
+   }
+);
 </script>
 
 <template>

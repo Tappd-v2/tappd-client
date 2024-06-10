@@ -2,12 +2,11 @@
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useApi } from "~/composables/useApi";
-import { useOrderStore } from "~/stores/order";
 
 const props = defineProps({
    cancelled: Boolean,
 });
-const orderStore = useOrderStore();
+
 const { apiGet } = useApi();
 const route = useRoute();
 const orderDetails = ref("...");
@@ -59,7 +58,7 @@ async function getCostumerName() {
          <a
             :href="
                cancelled
-                  ? `/venues/${orderStore.location.id}/call-staff`
+                  ? `/venues/${route.params.location}/call-staff`
                   : orderDetails.receiptUrl
             "
             :target="cancelled ? '_self' : '_blank'"
@@ -69,7 +68,7 @@ async function getCostumerName() {
          </a>
 
          <router-link
-            :to="`/venues/${orderStore.location.id}/menu`"
+            :to="`/venues/${route.params.location}/menu`"
             class="mt-4 block rounded-lg bg-blue-500 px-4 py-2 text-center text-white"
          >
             Terug naar menu

@@ -3,6 +3,7 @@ import { useApi } from "~/composables/useApi";
 import { useOrderStore } from "~/stores/order";
 
 const orderStore = useOrderStore();
+const route = useRoute();
 const { apiGet } = useApi();
 const tables = ref([]);
 
@@ -12,7 +13,7 @@ onMounted(() => {
 
 async function getTables() {
    try {
-      tables.value = await apiGet("tables", orderStore.location.id);
+      tables.value = await apiGet("tables", route.params.location);
    } catch (error) {
       console.error(error);
    }

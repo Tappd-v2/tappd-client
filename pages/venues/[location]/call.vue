@@ -6,27 +6,23 @@ import { useOrderStore } from "~/stores/order";
 
 const route = useRoute();
 const orderStore = useOrderStore();
-const { apiPost, apiGet } = useApi();
+const { apiPost } = useApi();
 const visible = ref(false);
-const btnDisabled = ref(false);
+const popupMessage = ref("");
 
 async function callStaff() {
    visible.value = true;
    const response = await apiPost(
-      "tables/call",
+      `tables/call`,
       { tableId: orderStore.table.id },
-      orderStore.location.id,
-   );
-   if (response.status === 200) btnDisabled.value = true;
+      route.params.location,
+   )
+   if (response.callRequest) { // The api returns a callRequest object if it exists, meaning the staff has already been called
+      popupMessage.value = "Het personeel heeft al een oproep van u ontvangen. Ze zullen zo snel mogelijk bij u zijn.";
+   } else {
+      popupMessage.value = "Bedankt voor het roepen van het personeel. Ze zullen zo snel mogelijk bij u zijn.";
+   }
 }
-
-onMounted(async () => {
-   const staffCalled = await apiGet(
-      `tables/${orderStore.table.id}`,
-      orderStore.location.id,
-   );
-   if (staffCalled) btnDisabled.value = true;
-});
 </script>
 
 <template>
@@ -38,8 +34,7 @@ onMounted(async () => {
          :style="{ width: '80vw' }"
       >
          <p class="mt-2">
-            Bedankt voor het roepen van het personeel. Ze zullen zo snel
-            mogelijk bij u zijn.
+            {{ popupMessage }}
          </p>
       </Dialog>
       <MainTitle title="Personeel Roepen" />
@@ -56,8 +51,7 @@ onMounted(async () => {
                Terug naar menu
             </NuxtLink>
             <Button
-               class="mt-5 w-full bg-blue-500 py-5 text-white"
-               :disabled="btnDisabled"
+               class="mt-5 w-full bg-blue-500 py-5 text-white flex justify-center items-center"
                @click="callStaff"
             >
                <i class="fas fa-bell mr-4" /> Personeel roepen

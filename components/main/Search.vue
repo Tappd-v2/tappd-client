@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watchEffect } from "vue";
 
 const props = defineProps({
    filterItems: {
@@ -10,7 +10,7 @@ const props = defineProps({
 
 const search = ref("");
 
-watch(search, (value) => {
+watchEffect(search, (value) => {
    props.filterItems(value);
 });
 </script>

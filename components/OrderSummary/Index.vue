@@ -19,6 +19,7 @@ const userStore = useUserStore();
 const config = useRuntimeConfig();
 const stripe = ref(null);
 const orderDetailsVisible = ref(false);
+const route = useRoute();
 
 watchEffect(() => orderStore.items);
 watchEffect(() => orderStore.table);
@@ -29,7 +30,7 @@ onMounted(async () => {
 
 async function handleCheckoutButtonClick() {
    if (props.finalStep) await createCheckoutSession();
-   else $router.push(`/venues/${orderStore.location.id}/checkout`);
+   else $router.push(`/venues/${route.params.location}/checkout`);
 }
 
 async function createCheckoutSession() {
@@ -44,9 +45,9 @@ async function createCheckoutSession() {
          tableId: orderStore.table.id,
          remarks: orderStore.remarks,
          userId: userStore.user.id,
-         location: orderStore.location.id,
+         location: route.params.location,
       };
-      const response = await apiPost("checkout", data, orderStore.location.id);
+      const response = await apiPost("checkout", data, route.params.location);
       const sessionId = response.id;
       const result = await stripe.value.redirectToCheckout({ sessionId });
       if (result.error) console.error(result.error.message);

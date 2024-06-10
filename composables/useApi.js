@@ -36,8 +36,14 @@ export function useApi() {
          return null;
       }
    };
+   const getLocationName = async (locationId) => {
+      const location = await apiGet(`locations/${locationId}`);
+      console.log(location);
+      return location ? location.name : null;
+   }
    return {
       apiGet,
       apiPost,
+      getLocationName,
    };
 }

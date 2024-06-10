@@ -1,16 +1,18 @@
 <script setup>
 import { useMenu } from "~/composables/useMenu";
 import { useOrderStore } from "~/stores/order";
+import  { useApi } from "~/composables/useApi";
 
+const route = useRoute();
 const { fetchData, menu, filterItems } = useMenu();
-
+const { getLocationName } = useApi();
 const orderStore = useOrderStore();
 const isLoading = ref(true);
 const pageTitle = ref("Menu");
 
 watch(async () => {
-   await fetchData(orderStore.location?.id);
-   pageTitle.value = `${orderStore.location?.name} Menu`;
+   await fetchData(route.params.location);
+   pageTitle.value = `${await getLocationName(route.params.location)} - Menu`;
    isLoading.value = false;
 });
 
