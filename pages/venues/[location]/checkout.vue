@@ -7,21 +7,19 @@ const route = useRoute();
 
 <template>
    <div>
-      <div class="mx-auto w-9/12">
+      <div class="mx-auto w-9/12 h-svh" >
          <MainTitle title="Bestelling afronden" />
          <div class="my-10">
             <FormTablePicker />
          </div>
          <div class="my-10">
-            <FloatLabel>
                <Textarea
                   v-model="orderStore.remarks"
                   rows="5"
                   cols="30"
                   class="w-full p-2"
+                  placeholder="Voer hier je opmerkingen in"
                />
-               <label>Andere opmerkingen</label>
-            </FloatLabel>
          </div>
          <NuxtLink
             :to="`/venues/${route.params.location}/menu`"
@@ -30,7 +28,7 @@ const route = useRoute();
             Terug naar menu
          </NuxtLink>
       </div>
-      <OrderSummary :final-step="true" />
+      <OrderSummary v-if="orderStore.items.length > 0" :final-step="true" />
 
       <MainItemDetail />
    </div>

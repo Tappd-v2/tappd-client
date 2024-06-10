@@ -21,6 +21,7 @@ const stripe = ref(null);
 const orderDetailsVisible = ref(false);
 
 watchEffect(() => orderStore.items);
+watchEffect(() => orderStore.table);
 
 onMounted(async () => {
    stripe.value = await loadStripe(config.public.stripePublishableKey);
@@ -59,10 +60,7 @@ function toggleOrderDetails() {
 }
 
 const isBtnDisabled = computed(() => {
-   return (
-      (orderStore.itemCount === 0 || orderStore.table === null) &&
-      props.finalStep
-   );
+   return (props.finalStep && orderStore.table === null)      
 });
 </script>
 

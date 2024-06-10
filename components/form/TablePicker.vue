@@ -20,14 +20,13 @@ async function getTables() {
 </script>
 
 <template>
-   <FloatLabel class="md:w-14rem w-full">
       <Dropdown
          v-model="orderStore.table"
          input-id="dd-table"
          :options="tables"
          option-label="name"
          class="w-full text-black"
+         placeholder="Kies een tafel"
       />
-      <label for="dd-table">Tafel</label>
-   </FloatLabel>
+      
 </template>

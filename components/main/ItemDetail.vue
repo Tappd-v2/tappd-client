@@ -77,7 +77,7 @@ function getButtonLabel(amount) {
 </script>
 
 <template>
-   <Sidebar v-model:visible="isVisible" position="bottom">
+   <Sidebar v-model:visible="isVisible" position="bottom" class="h-56">
       <div class="mx-auto flex flex-col items-center justify-between">
          <div class="flex w-full items-center justify-between pb-6">
             <div>
