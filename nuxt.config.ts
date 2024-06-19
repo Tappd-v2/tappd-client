@@ -35,6 +35,11 @@ export default defineNuxtConfig({
          apiBaseUrl: process.env.API_BASE_URL,
          stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
       },
+      private: {
+         kindeId: process.env.NUXT_KINDE_CLIENT_ID,
+         kindeDomain: process.env.NUXT_KINDE_AUTH_DOMAIN,
+         kindeRedirectUri: process.env.NUXT_KINDE_REDIRECT_URL,
+      },
    },
 
    css: [

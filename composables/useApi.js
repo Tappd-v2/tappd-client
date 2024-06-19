@@ -5,7 +5,13 @@ export function useApi() {
          const url = locationId
             ? `${config.public.apiBaseUrl}/${locationId}/${endpoint}`
             : `${config.public.apiBaseUrl}/${endpoint}`;
-         const response = await fetch(url);
+         const response = await fetch(url, {
+            method: "GET",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            credentials: "include",
+         });
          if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
          }
@@ -40,7 +46,7 @@ export function useApi() {
       const location = await apiGet(`locations/${locationId}`);
       console.log(location);
       return location ? location.name : null;
-   }
+   };
    return {
       apiGet,
       apiPost,

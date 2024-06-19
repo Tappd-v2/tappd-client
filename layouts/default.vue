@@ -5,27 +5,25 @@ import { useApi } from "~/composables/useApi";
 const { apiGet } = useApi();
 const route = useRoute();
 const userStore = useUserStore();
-const credentials = {
-   email: "user@example.com",
-   password: "example",
-};
+
 async function getLocation(locationId) {
    if (locationId) {
       const location = await apiGet(`locations/${locationId}`);
       if (!location) await navigateTo("/404");
    }
 }
-userStore.login(credentials);
 
 onMounted(async () => {
    getLocation(route.params.location);
+   userStore.getCurrentUser();
 });
 
 watch(
-   () => route.params.location,
-   async (locationId) => {
-      getLocation(locationId);
-   }
+   () => route.fullPath, // Watch for full path to capture all navigation changes
+   async () => {
+      await getLocation(route.params.location);
+      await userStore.getCurrentUser(); // Refetch currentUser on navigation
+   },
 );
 </script>
 

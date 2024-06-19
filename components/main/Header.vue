@@ -7,28 +7,46 @@ const route = useRoute();
 const { getLocationName } = useApi();
 const title = ref("");
 
-async function getTitle()  {
+async function getTitle() {
    if (route.path === "/") return "Tappd";
    return `Tappd - ${await getLocationName(route.params.location)}`;
 }
 
-onMounted( async () => {
+onMounted(async () => {
    title.value = await getTitle();
 });
+
+const isVisible = ref(false);
+
+const showSidebar = () => {
+   isVisible.value = !isVisible.value;
+};
+
+const updateVisibility = (value) => {
+   isVisible.value = value;
+};
 
 watch(
    () => route.params.location,
    async () => {
       title.value = await getTitle();
-   }
+   },
 );
 </script>
 
 <template>
    <div class="hero">
-      <div class="text-center">
-         <h1 class="text-center text-5xl"> {{ title }}</h1>
-         <p class="text-xl">Eenvoudig Bestellen</p>
+      <MenuButton class="bg-transparent" @click="showSidebar" />
+      <Menu
+         :visible="isVisible"
+         class="z-20"
+         @update:visible="updateVisibility"
+      />
+      <div class="p-3">
+         <div class="text-center">
+            <h1 class="text-center text-5xl">{{ title }}</h1>
+            <p class="text-xl">Eenvoudig Bestellen</p>
+         </div>
       </div>
    </div>
 </template>
@@ -39,7 +57,7 @@ watch(
    background-position: center;
    background-size: cover;
    color: white;
-   padding: 3rem;
+   padding: 1rem;
    font-family: "Staatliches", cursive;
 }
 </style>
