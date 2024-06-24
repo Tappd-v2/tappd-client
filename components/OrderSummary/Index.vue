@@ -44,7 +44,7 @@ async function createCheckoutSession() {
          })),
          tableId: orderStore.table.id,
          remarks: orderStore.remarks,
-         userId: userStore.user.id,
+         userId: userStore.user ? userStore.user.id : null,
          location: route.params.location,
       };
       const response = await apiPost("checkout", data, route.params.location);
@@ -61,7 +61,7 @@ function toggleOrderDetails() {
 }
 
 const isBtnDisabled = computed(() => {
-   return (props.finalStep && orderStore.table === null)      
+   return props.finalStep && orderStore.table === null;
 });
 </script>
 

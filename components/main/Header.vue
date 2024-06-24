@@ -8,7 +8,7 @@ const { getLocationName } = useApi();
 const title = ref("");
 
 async function getTitle() {
-   if (route.path === "/") return "Tappd";
+   if (route.path === "/" || route.path === "/account") return "Tappd";
    return `Tappd - ${await getLocationName(route.params.location)}`;
 }
 

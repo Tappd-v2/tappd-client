@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
-import { useApi } from "~/composables/useApi";
+import { useUserStore } from "~/stores/user";
 
 const props = defineProps({
    cancelled: Boolean,
@@ -10,21 +10,21 @@ const props = defineProps({
 const { apiGet } = useApi();
 const route = useRoute();
 const orderDetails = ref("...");
-const userDetails = ref("...");
 
 onMounted(async () => {
-   if (!props.cancelled) await getCostumerName();
+   if (!props.cancelled) await getOrderDetails();
 });
 
-async function getCostumerName() {
+async function getOrderDetails() {
    try {
       const res = await apiGet(`orders/${route.query.session_id}`);
-      orderDetails.value = res.orders;
-      userDetails.value = res.users;
+      orderDetails.value = res;
    } catch (error) {
-      console.error("Error fetching customer name:", error);
+      console.error("Error fetching customer name:", error); //TODO: Remove in production
    }
 }
+
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -44,7 +44,7 @@ async function getCostumerName() {
          {{
             cancelled
                ? "Bestelling geannuleerd"
-               : `Bedankt voor uw bestelling ${userDetails ? userDetails.username : "..."}`
+               : `Bedankt voor uw bestelling ${userStore.user ? userStore.user.name : ""}`
          }}
       </h1>
       <p class="text-center text-gray-500">

@@ -16,15 +16,13 @@ export const useUserStore = defineStore("user", {
    },
    actions: {
       async getCurrentUser() {
-         console.log("Getting current user");
          const { apiGet } = useApi();
          const response = await apiGet("me");
          if (response) {
-            this.user = response;
+            this.user = response.user;
          }
       },
       logout() {
-         console.log("Logging out");
          this.user = null;
       },
    },

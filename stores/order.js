@@ -7,6 +7,7 @@ export const useOrderStore = defineStore("order", {
          selectedItem: null,
          table: null,
          remarks: "",
+         location: null,
       };
    },
    getters: {
@@ -58,6 +59,14 @@ export const useOrderStore = defineStore("order", {
          this.selectedItem = null;
          this.table = null;
          this.remarks = "";
+      },
+      setLocation(location) {
+         const oldLocation = this.location;
+         this.location = location;
+         if (oldLocation && oldLocation.id !== location.id) {
+            console.log("Location changed, resetting order");
+            this.reset();
+         }
       },
    },
    persist: true, // Enable persistence for this store

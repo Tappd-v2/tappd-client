@@ -15,7 +15,7 @@
                   class="cursor-pointer"
                   :href="`${apiUrl}/logout`"
                   target="_blank"
-                  @click="logout"
+                  @click="userStore.logout()"
                   >Log out</a
                >
             </li>
@@ -42,11 +42,6 @@ const apiUrl = config.public.apiBaseUrl;
 const userStore = useUserStore();
 
 watch(() => userStore.user);
-
-const logout = async () => {
-   userStore.logout();
-   window.location.href = "/";
-};
 </script>
 
 <style scoped>

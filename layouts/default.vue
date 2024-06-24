@@ -1,15 +1,18 @@
 <script setup>
 import { useUserStore } from "~/stores/user";
+import { useOrderStore } from "../stores/order";
 import { useApi } from "~/composables/useApi";
 
 const { apiGet } = useApi();
 const route = useRoute();
 const userStore = useUserStore();
+const orderStore = useOrderStore();
 
 async function getLocation(locationId) {
    if (locationId) {
       const location = await apiGet(`locations/${locationId}`);
       if (!location) await navigateTo("/404");
+      orderStore.setLocation(location);
    }
 }
 
