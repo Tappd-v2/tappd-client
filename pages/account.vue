@@ -23,6 +23,7 @@ onMounted(() => {
 async function getOrders() {
    try {
       const orders = await apiGet("orders?userId=" + userStore.user.id);
+      console.log(orders);
       itemCount.value = orders.length;
       total.value = orders.reduce(
          (acc, order) => acc + parseFloat(order.totalPrice),

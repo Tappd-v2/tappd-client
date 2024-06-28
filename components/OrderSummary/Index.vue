@@ -45,8 +45,9 @@ async function createCheckoutSession() {
          tableId: orderStore.table.id,
          remarks: orderStore.remarks,
          userId: userStore.user ? userStore.user.id : null,
-         location: route.params.location,
+         locationId: route.params.location,
       };
+      console.log(data);
       const response = await apiPost("checkout", data, route.params.location);
       const sessionId = response.id;
       const result = await stripe.value.redirectToCheckout({ sessionId });

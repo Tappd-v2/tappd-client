@@ -7,11 +7,15 @@ const { apiGet } = useApi();
 const route = useRoute();
 const userStore = useUserStore();
 const orderStore = useOrderStore();
+const showError = ref(false);
 
 async function getLocation(locationId) {
    if (locationId) {
       const location = await apiGet(`locations/${locationId}`);
-      if (!location) await navigateTo("/404");
+      if (!location) {
+         showError.value = true;
+         return;
+      }
       orderStore.setLocation(location);
    }
 }
@@ -36,6 +40,9 @@ watch(
          <MainHeader />
       </header>
       <main class="flex-1 bg-gray-100">
+         <div v-if="showError" class="m-10">
+            <ErrorMessage error-message="Location not found" />
+         </div>
          <slot />
       </main>
    </div>

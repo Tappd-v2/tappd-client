@@ -1,14 +1,16 @@
 <script setup>
 import { useMenu } from "~/composables/useMenu";
 import { useOrderStore } from "~/stores/order";
-import  { useApi } from "~/composables/useApi";
+import { useApi } from "~/composables/useApi";
 
 const route = useRoute();
 const { fetchData, menu, filterItems } = useMenu();
 const { getLocationName } = useApi();
 const orderStore = useOrderStore();
+const userStore = useUserStore();
 const isLoading = ref(true);
 const pageTitle = ref("Menu");
+const isStaff = route.params.location === userStore.permissions?.orgCode;
 
 watch(async () => {
    await fetchData(route.params.location);
@@ -37,6 +39,7 @@ useHead({
       </div>
 
       <div v-else>
+         <StaffNavigation v-if="isStaff" />
          <MainSearch :filter-items="filterItems" />
          <MainCategories :menu="menu" />
          <MainMenu :menu="menu" :store="orderStore" />

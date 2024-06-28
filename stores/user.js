@@ -4,6 +4,7 @@ export const useUserStore = defineStore("user", {
    state: () => {
       return {
          user: null,
+         permissions: null,
       };
    },
    getters: {
@@ -20,11 +21,13 @@ export const useUserStore = defineStore("user", {
          const response = await apiGet("me");
          if (response) {
             this.user = response.user;
+            this.permissions = response.permissions;
          }
+         console.log(this.user);
       },
       logout() {
          this.user = null;
       },
    },
-   persist: true, // Enable persistence for this store
+   persist: false,
 });
