@@ -1,5 +1,5 @@
 <template>
-   <Sidebar header="Tappd">
+   <Drawer v-model:visible="visible" header="Tappd">
       <nav>
          <ul class="flex flex-col gap-4 p-4">
             <li>
@@ -29,7 +29,7 @@
             </li>
          </ul>
       </nav>
-   </Sidebar>
+   </Drawer>
 </template>
 
 <script setup>
@@ -41,7 +41,11 @@ const apiUrl = config.public.apiBaseUrl;
 
 const userStore = useUserStore();
 
-watch(() => userStore.user);
+watchEffect(() => userStore.user);
+
+const visible = ref(true);
+
+console.console.log("visible", visible);
 </script>
 
 <style scoped>

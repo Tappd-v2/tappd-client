@@ -2,17 +2,18 @@
    <div
       class="mx-auto flex h-full flex-col justify-center sm:w-11/12 md:w-9/12"
    >
-      <h1 class="mb-5 mt-10 text-center text-4xl font-bold text-gray-800">
+      <h1 class="mt-10 mb-5 text-center text-4xl font-bold text-black">
          Welkom bij Tappd
       </h1>
+
       <p>
          Tappd is een app waarmee je eenvoudig drankjes kunt bestellen bij jouw
          favoriete horecazaak.
       </p>
 
-      <p class="mb-1 mt-5">Kies een locatie en begin met bestellen!</p>
+      <p class="mt-5 mb-1">Kies een locatie en begin met bestellen!</p>
 
-      <Dropdown
+      <Select
          v-model="pickedLocation"
          input-id="dd-location"
          :options="locations"

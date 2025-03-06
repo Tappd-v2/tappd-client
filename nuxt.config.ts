@@ -1,3 +1,6 @@
+import Aura from "@primeuix/themes/aura";
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
    devtools: { enabled: false },
 
@@ -20,12 +23,16 @@ export default defineNuxtConfig({
       },
    },
 
+   vite: {
+      plugins: [tailwindcss()],
+   },
+
    modules: [
       "@nuxt/eslint",
       "@vueuse/nuxt",
       "@nuxtjs/seo",
       "@vueuse/motion/nuxt",
-      "nuxt-primevue",
+      "@primevue/nuxt-module",
       "@pinia/nuxt",
       "@pinia-plugin-persistedstate/nuxt",
    ],
@@ -42,18 +49,18 @@ export default defineNuxtConfig({
       },
    },
 
-   css: [
-      "~/assets/css/tailwind.css",
-      "primeicons/primeicons.css",
-      "primevue/resources/themes/lara-light-blue/theme.css",
-   ],
-
-   postcss: {
-      plugins: {
-         tailwindcss: {},
-         autoprefixer: {},
+   primevue: {
+      options: {
+         theme: {
+            preset: Aura,
+            options: {
+               darkModeSelector: false,
+            },
+         },
       },
    },
+
+   css: ["~/assets/css/tailwind.css"],
 
    piniaPersistedstate: {
       cookieOptions: {
@@ -61,4 +68,6 @@ export default defineNuxtConfig({
       },
       storage: "localStorage",
    },
+
+   compatibilityDate: "2025-03-06",
 });

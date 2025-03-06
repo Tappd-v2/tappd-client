@@ -21,13 +21,12 @@ async function getTables() {
 </script>
 
 <template>
-      <Dropdown
-         v-model="orderStore.table"
-         input-id="dd-table"
-         :options="tables"
-         option-label="name"
-         class="w-full text-black"
-         placeholder="Kies een tafel"
-      />
-      
+   <Select
+      v-model="orderStore.table"
+      input-id="dd-table"
+      :options="tables"
+      option-label="name"
+      class="w-full text-black"
+      placeholder="Kies een tafel"
+   />
 </template>

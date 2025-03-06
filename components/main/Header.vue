@@ -26,7 +26,7 @@ const updateVisibility = (value) => {
    isVisible.value = value;
 };
 
-watch(
+watchEffect(
    () => route.params.location,
    async () => {
       title.value = await getTitle();
@@ -37,11 +37,7 @@ watch(
 <template>
    <div class="hero">
       <MenuButton class="bg-transparent" @click="showSidebar" />
-      <Menu
-         :visible="isVisible"
-         class="z-20"
-         @update:visible="updateVisibility"
-      />
+      <Menu class="z-20" />
       <div class="p-3">
          <div class="text-center">
             <h1 class="text-center text-5xl">{{ title }}</h1>

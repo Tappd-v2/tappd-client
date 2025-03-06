@@ -67,8 +67,4 @@ useHead({
    </div>
 </template>
 
-<style>
-html.dark {
-   color-scheme: dark;
-}
-</style>
+<style></style>

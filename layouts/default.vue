@@ -25,7 +25,7 @@ onMounted(async () => {
    userStore.getCurrentUser();
 });
 
-watch(
+watchEffect(
    () => route.fullPath, // Watch for full path to capture all navigation changes
    async () => {
       await getLocation(route.params.location);

@@ -12,7 +12,7 @@ const isLoading = ref(true);
 const pageTitle = ref("Menu");
 const isStaff = route.params.location === userStore.permissions?.orgCode;
 
-watch(async () => {
+watchEffect(async () => {
    await fetchData(route.params.location);
    pageTitle.value = `${await getLocationName(route.params.location)} - Menu`;
    isLoading.value = false;

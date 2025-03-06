@@ -15,11 +15,11 @@ onMounted(async () => {
    title.value = `Welkom bij ${await getLocationName(route.params.location)}`;
 });
 
-watch(
+watchEffect(
    () => route.params.location,
    async () => {
       title.value = `Welkom bij ${await getLocationName(route.params.location)}`;
-   }
+   },
 );
 </script>
 
