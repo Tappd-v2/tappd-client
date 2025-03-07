@@ -49,14 +49,7 @@ export default defineNuxtConfig({
    },
 
    primevue: {
-      options: {
-         theme: {
-            preset: Aura,
-            options: {
-               darkModeSelector: false,
-            },
-         },
-      },
+      importTheme: { from: "./assets/themes/tappd-theme.js" },
    },
 
    css: ["~/assets/css/tailwind.css"],
