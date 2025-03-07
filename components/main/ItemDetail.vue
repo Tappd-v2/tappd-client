@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watch } from "vue";
 
 import { useOrderStore } from "~/stores/order";
 
@@ -25,14 +25,15 @@ function decreaseAmount() {
    if (amount.value > 0) amount.value--;
 }
 
-watchEffect(
+watch(
    () => orderStore.selectedItem,
    (value) => {
+      console.log(value);
       if (value) isVisible.value = true;
    },
 );
 
-watchEffect(
+watch(
    () => orderStore.selectedItem,
    () => {
       if (itemAlreadyInOrder.value) amount.value = originalAmount.value;
@@ -77,7 +78,7 @@ function getButtonLabel(amount) {
 </script>
 
 <template>
-   <Drawer v-model:visible="isVisible" position="bottom" class="h-56">
+   <Drawer v-model:visible="isVisible" position="bottom" class="min-h-56">
       <div class="mx-auto flex flex-col items-center justify-between">
          <div class="flex w-full items-center justify-between pb-6">
             <div>

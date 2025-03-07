@@ -28,7 +28,7 @@ function selectItem(item) {
       v-for="category in menu"
       :id="formatName(category.name)"
       :key="category.id"
-      class="text-md mx-auto flex w-11/12 flex-col pb-10 pt-5"
+      class="text-md mx-auto flex w-11/12 flex-col pt-5 pb-10"
    >
       <h3 class="mb-5 text-2xl font-bold">
          {{ category.name }}
@@ -39,7 +39,13 @@ function selectItem(item) {
          :key="items.id"
          @click="selectItem(items)"
       >
-         <li class="border-b py-5 hover:cursor-pointer hover:font-medium">
+         <li
+            class="py-5 hover:cursor-pointer hover:font-medium"
+            :class="{
+               'border-b border-gray-300':
+                  items.id != category.items[category.items.length - 1].id,
+            }"
+         >
             <div class="flex justify-between">
                <span>{{ items.name }}</span>
                <span>&#8364;{{ items.price }}</span>

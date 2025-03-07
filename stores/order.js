@@ -44,6 +44,7 @@ export const useOrderStore = defineStore("order", {
       },
       setSelectedItem(item) {
          this.selectedItem = item;
+         console.log("Selected item", item);
       },
       unsetSelectedItem() {
          this.selectedItem = null;
