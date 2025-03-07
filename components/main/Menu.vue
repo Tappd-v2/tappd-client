@@ -1,18 +1,14 @@
 <script setup>
 import { useOrderStore } from "~/stores/order";
 
+const orderStore = useOrderStore();
+
 defineProps({
    menu: {
       type: Array,
       required: true,
    },
-   store: {
-      type: Object,
-      required: true,
-   },
 });
-
-const orderStore = useOrderStore();
 
 function selectItem(item) {
    orderStore.unsetSelectedItem();
@@ -24,34 +20,42 @@ function selectItem(item) {
 </script>
 
 <template>
-   <div
-      v-for="category in menu"
-      :id="formatName(category.name)"
-      :key="category.id"
-      class="text-md mx-auto flex w-11/12 flex-col pt-5 pb-10"
-   >
-      <h3 class="mb-5 text-2xl font-bold">
-         {{ category.name }}
-      </h3>
-
-      <ul
-         v-for="items in category.items"
-         :key="items.id"
-         @click="selectItem(items)"
+   <section>
+      <div
+         v-for="category in menu"
+         :id="formatName(category.name)"
+         :key="category.id"
       >
-         <li
-            class="py-5 hover:cursor-pointer hover:font-medium"
-            :class="{
-               'border-b border-gray-300':
-                  items.id != category.items[category.items.length - 1].id,
-            }"
+         <div
+            v-if="category.items.length > 0"
+            class="text-md mx-auto flex w-11/12 flex-col pt-5 pb-10"
          >
-            <div class="flex justify-between">
-               <span>{{ items.name }}</span>
-               <span>&#8364;{{ items.price }}</span>
-            </div>
-         </li>
-      </ul>
-   </div>
-   <MainItemDetail />
+            <h3 class="mb-5 text-2xl font-bold">
+               {{ category.name }}
+            </h3>
+
+            <ul
+               v-for="items in category.items"
+               :key="items.id"
+               @click="selectItem(items)"
+            >
+               <li
+                  class="py-5 hover:cursor-pointer hover:font-medium"
+                  :class="{
+                     'border-b border-gray-300':
+                        items.id !=
+                        category.items[category.items.length - 1].id,
+                  }"
+               >
+                  <div class="flex justify-between">
+                     <span>{{ items.name }}</span>
+                     <span>&#8364;{{ items.price }}</span>
+                  </div>
+               </li>
+            </ul>
+         </div>
+      </div>
+
+      <MainItemDetail />
+   </section>
 </template>

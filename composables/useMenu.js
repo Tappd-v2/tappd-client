@@ -8,6 +8,7 @@ export function useMenu() {
    const categories = ref([]);
    const filteredItems = ref([]);
    const { apiGet } = useApi();
+
    const menu = computed(() => {
       return categories.value.map((category) => ({
          name: category.name,
@@ -25,25 +26,33 @@ export function useMenu() {
 
    const fetchData = async (locationId) => {
       await fetchCategories(locationId);
-      await fetchItems(categories.value);
+      await fetchItems(); // Removed categories.value as it's not needed
    };
 
-   const fetchItems = async (categories) => {
-      const allItems = await Promise.all(
-         categories.map(async (category) => {
-            const response = await apiGet(`items?categoryId=${category.id}`);
-            return response;
-         }),
-      );
-      items.value = allItems.flat(); // Flatten the array of arrays
-      filteredItems.value = items.value;
+   const fetchItems = async () => {
+      // Fetch all items for all categories in parallel
+      const allItems = [];
+      for (const category of categories.value) {
+         const response = await apiGet(`items?categoryId=${category.id}`);
+         allItems.push(...response); // Push items directly into allItems
+      }
+
+      // Update items.value and filteredItems.value reactively
+      items.value.length = 0;
+      items.value.push(...allItems);
+      filteredItems.value.length = 0;
+      filteredItems.value.push(...allItems);
    };
 
    const fetchCategories = async (locationId) => {
       const response = await fetch(
          `${config.public.apiBaseUrl}/${locationId}/categories`,
       );
-      categories.value = await response.json();
+      const data = await response.json();
+
+      // Update categories.value reactively
+      categories.value.length = 0;
+      categories.value.push(...data);
    };
 
    return {

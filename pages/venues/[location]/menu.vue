@@ -40,9 +40,9 @@ useHead({
 
       <div v-else>
          <StaffNavigation v-if="isStaff" />
-         <MainSearch :filter-items="filterItems" />
+         <MainSearch @search="filterItems" />
          <MainCategories :menu="menu" />
-         <MainMenu :menu="menu" :store="orderStore" />
+         <MainMenu :menu="menu" />
          <OrderSummary v-if="orderStore.items.length > 0" :final-step="false" />
          <MainNoResults v-if="!menu.length" />
       </div>

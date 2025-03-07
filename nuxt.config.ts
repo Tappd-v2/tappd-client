@@ -30,7 +30,6 @@ export default defineNuxtConfig({
    modules: [
       "@nuxt/eslint",
       "@vueuse/nuxt",
-      "@nuxtjs/seo",
       "@vueuse/motion/nuxt",
       "@primevue/nuxt-module",
       "@pinia/nuxt",

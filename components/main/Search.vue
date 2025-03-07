@@ -1,18 +1,13 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-
-const props = defineProps({
-   filterItems: {
-      type: Function,
-      required: true,
-   },
-});
+import { ref } from "vue";
 
 const search = ref("");
 
-watchEffect(search, (value) => {
-   props.filterItems(value);
-});
+const emit = defineEmits(["search"]);
+
+const onSearch = (e) => {
+   emit("search", e.target.value);
+};
 </script>
 
 <template>
@@ -27,6 +22,7 @@ watchEffect(search, (value) => {
          placeholder="Zoeken"
          unstyled
          class="flex-grow border-0 focus:outline-none"
+         @input="onSearch"
       />
    </IconField>
 </template>
