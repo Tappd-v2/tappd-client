@@ -6,7 +6,7 @@ import { useUserStore } from "~/stores/user";
 
 const route = useRoute();
 const { getLocationName } = useApi();
-const title = ref("");
+const title = ref("Tappd");
 
 async function getTitle() {
    if (route.path === "/" || route.path === "/account") return "Tappd";
