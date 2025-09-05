@@ -1,0 +1,56 @@
+{
+   "start_url": "https://tappd-demo.lukasolivier.be/",
+   "dir": "ltr",
+   "lang": "nl",
+   "display": "standalone",
+   "orientation": "portrait",
+   "categories": ["shopping"],
+   "icons": [
+      {
+         "src": "android-chrome-192x192.png",
+         "type": "image/png",
+         "sizes": "192x192"
+      },
+      {
+         "src": "android-chrome-512x512.png",
+         "type": "image/png",
+         "sizes": "512x512"
+      }
+   ],
+   "background_color": "#ffffff",
+   "theme_color": "#000000",
+   "description": "Tappd is een innovatieve app voor het bestellen van drankjes.",
+   "id": "tappd",
+   "name": "Tappd - Eenvoudig bestellen",
+   "short_name": "Tappd",
+   "screenshots": [
+      {
+         "src": "screenshots/desktop.png",
+         "sizes": "2475x1502",
+         "type": "image/png",
+         "form_factor": "wide",
+         "label": "Besteloverzicht"
+      },
+      {
+         "src": "screenshots/desktop2.png",
+         "sizes": "2475x1502",
+         "type": "image/png",
+         "form_factor": "wide",
+         "label": "Afrekenen"
+      },
+      {
+         "src": "screenshots/mobile.png",
+         "sizes": "1442x3094",
+         "type": "image/png",
+         "form_factor": "narrow",
+         "label": "Besteloverzicht"
+      },
+      {
+         "src": "screenshots/mobile2.png",
+         "sizes": "1442x3094",
+         "type": "image/png",
+         "form_factor": "narrow",
+         "label": "Afrekenen"
+      }
+   ]
+}

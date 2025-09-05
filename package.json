@@ -1,0 +1,56 @@
+{
+   "private": true,
+   "scripts": {
+      "build": "nuxt build",
+      "dev": "nuxt dev",
+      "generate": "nuxt generate",
+      "preview": "nuxt preview",
+      "postinstall": "nuxt prepare",
+      "lint": "yarn lint:eslint && yarn lint:prettier",
+      "lint:eslint": "eslint .",
+      "lint:prettier": "prettier . --check",
+      "lintfix": "eslint . --fix && prettier --write --list-different ."
+   },
+   "devDependencies": {
+      "@antfu/eslint-config": "^4.6.0",
+      "@nuxt/eslint": "^1.1.0",
+      "@nuxtjs/eslint-config-typescript": "^12.1.0",
+      "@nuxtjs/eslint-module": "^4.1.0",
+      "@nuxtjs/kinde": "^0.1.11",
+      "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
+      "@primevue/nuxt-module": "^4.3.1",
+      "@vite-pwa/nuxt": "^0.10.6",
+      "@vueuse/core": "^12.8.2",
+      "@vueuse/nuxt": "^12.8.2",
+      "autoprefixer": "^10.4.20",
+      "eslint": "^9.21.0",
+      "eslint-config-prettier": "^10.0.2",
+      "eslint-plugin-nuxt": "^4.0.0",
+      "eslint-plugin-prettier": "^5.2.3",
+      "nuxt": "^3.15.4",
+      "nuxt-primevue": "^3.0.0",
+      "postcss": "^8.5.3",
+      "prettier": "^3.5.3",
+      "prettier-plugin-tailwindcss": "^0.6.11",
+      "tailwindcss": "^4.0.11",
+      "typescript": "^5.8.2"
+   },
+   "dependencies": {
+      "@fortawesome/fontawesome-free": "^6.7.2",
+      "@kinde-oss/kinde-auth-pkce-js": "^4.2.2",
+      "@pinia/nuxt": "^0.10.1",
+      "@primeuix/themes": "^1.0.0",
+      "@stripe/stripe-js": "^5.9.2",
+      "@tailwindcss/postcss": "^4.0.11",
+      "@tailwindcss/vite": "^4.0.11",
+      "@vueuse/motion": "^2.2.6",
+      "pinia": "^3.0.1",
+      "pinia-plugin-persistedstate": "^4.2.0",
+      "primeicons": "^7.0.0",
+      "primevue": "^4.3.1",
+      "stripe": "^17.7.0"
+   },
+   "overrides": {
+      "vue": "latest"
+   }
+}

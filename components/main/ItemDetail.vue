@@ -1,0 +1,122 @@
+<script setup>
+import { ref, watch } from "vue";
+
+import { useOrderStore } from "~/stores/order";
+
+const orderStore = useOrderStore();
+
+const amount = ref(1);
+const isVisible = ref(false);
+
+const itemAlreadyInOrder = computed(() =>
+   orderStore.items.some((item) => item.id === orderStore.selectedItem?.id),
+);
+const originalAmount = computed(
+   () =>
+      orderStore.items.find((item) => item.id === orderStore.selectedItem?.id)
+         ?.amount,
+);
+
+function increaseAmount() {
+   amount.value++;
+}
+
+function decreaseAmount() {
+   if (amount.value > 0) amount.value--;
+}
+
+watch(
+   () => orderStore.selectedItem,
+   (value) => {
+      console.log(value);
+      if (value) isVisible.value = true;
+   },
+);
+
+watch(
+   () => orderStore.selectedItem,
+   () => {
+      if (itemAlreadyInOrder.value) amount.value = originalAmount.value;
+      else amount.value = 1;
+   },
+);
+
+function handleButtonClick() {
+   if (amount.value === 0 && itemAlreadyInOrder.value) removeFromOrder();
+   else addToOrder();
+}
+
+function addToOrder() {
+   if (amount.value === 0) {
+      isVisible.value = false;
+      return;
+   }
+   if (itemAlreadyInOrder.value)
+      orderStore.updateItem(orderStore.selectedItem.id, amount.value); // Update item in the order
+   else
+      orderStore.addItem({ ...orderStore.selectedItem, amount: amount.value }); // Add item to the order
+   isVisible.value = false;
+}
+
+function removeFromOrder() {
+   if (orderStore.selectedItem)
+      orderStore.removeItem(orderStore.selectedItem.id); // Remove item from the order
+
+   isVisible.value = false;
+}
+
+function getButtonLabel(amount) {
+   if (itemAlreadyInOrder.value && amount === 0)
+      return "Verwijderen uit bestelling";
+   else if (itemAlreadyInOrder.value && amount === originalAmount.value)
+      return "Terug";
+   else if (!itemAlreadyInOrder.value && amount === 0) return "Annuleren";
+   else if (amount > 0 && itemAlreadyInOrder.value)
+      return "Bestelling bijwerken";
+   else return "Toevoegen aan bestelling";
+}
+</script>
+
+<template>
+   <Drawer v-model:visible="isVisible" position="bottom" class="min-h-56">
+      <div class="mx-auto flex flex-col items-center justify-between">
+         <div class="flex w-full items-center justify-between pb-6">
+            <div>
+               <h3 class="text-lg font-bold">
+                  {{ orderStore.selectedItem?.name }}
+               </h3>
+               <p class="text-sm text-gray-500">
+                  {{ orderStore.selectedItem?.description }}
+               </p>
+            </div>
+            <div class="flex items-center">
+               <button
+                  class="cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  @click="decreaseAmount"
+               >
+                  <i class="fas fa-minus" />
+               </button>
+               <span class="mx-3 text-xl">{{ amount }}</span>
+               <button
+                  class="cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  @click="increaseAmount"
+               >
+                  <i class="fas fa-plus" />
+               </button>
+            </div>
+         </div>
+
+         <button
+            class="w-full cursor-pointer px-3 py-3 text-white transition-colors duration-500"
+            :class="
+               amount > 0
+                  ? 'bg-blue-500 hover:bg-blue-600'
+                  : 'bg-red-500 hover:bg-red-600'
+            "
+            @click="handleButtonClick"
+         >
+            {{ getButtonLabel(amount) }}
+         </button>
+      </div>
+   </Drawer>
+</template>
