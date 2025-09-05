@@ -44,7 +44,6 @@ export const useOrderStore = defineStore("order", {
       },
       setSelectedItem(item) {
          this.selectedItem = item;
-         console.log("Selected item", item);
       },
       unsetSelectedItem() {
          this.selectedItem = null;
@@ -65,7 +64,6 @@ export const useOrderStore = defineStore("order", {
          const oldLocation = this.location;
          this.location = location;
          if (oldLocation && oldLocation.id !== location.id) {
-            console.log("Location changed, resetting order");
             this.reset();
          }
       },

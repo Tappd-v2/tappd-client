@@ -28,7 +28,6 @@ function decreaseAmount() {
 watch(
    () => orderStore.selectedItem,
    (value) => {
-      console.log(value);
       if (value) isVisible.value = true;
    },
 );

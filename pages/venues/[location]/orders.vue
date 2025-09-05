@@ -136,8 +136,6 @@ function sortOrders(list) {
 async function getOrders() {
    try {
       const response = await apiGet(`orders?locationId=${location}`);
-      console.log(response);
-
       const mapped = response.map((order) => ({
          ...order,
          expanded: order.state === "new" || order.state === "pending",

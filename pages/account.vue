@@ -85,7 +85,6 @@ async function getOrders() {
    try {
       const response = await apiGet("orders?userId=" + userStore.user.id);
       orders.value = response;
-      console.log(response);
    } catch (error) {
       console.error(error);
    }

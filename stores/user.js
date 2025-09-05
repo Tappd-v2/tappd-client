@@ -28,8 +28,6 @@ export const useUserStore = defineStore("user", {
             this.user = response.user;
             this.permissions = response.permissions;
          }
-         console.log(this.user);
-         console.log(this.permissions);
       },
       logout() {
          this.user = null;

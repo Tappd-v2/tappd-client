@@ -49,7 +49,6 @@ onMounted(() => {
 async function getLocations() {
    try {
       locations.value = await apiGet("locations");
-      console.log("Fetched locations:", locations.value);
    } catch (error) {
       console.error(error);
    }
