@@ -89,4 +89,8 @@ async function getOrders() {
       console.error(error);
    }
 }
+
+useHead({
+   title: "Account | Tappd - Eenvoudig Bestellen",
+});
 </script>

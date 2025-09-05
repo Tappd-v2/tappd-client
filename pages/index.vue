@@ -141,6 +141,10 @@ const steps = [
 definePageMeta({
    layout: "landing",
 });
+
+useHead({
+   title: "Over ons | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <style scoped>

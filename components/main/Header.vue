@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { useApi } from "~/composables/useApi";
 import { useUserStore } from "~/stores/user";
@@ -8,9 +8,20 @@ const route = useRoute();
 const { getLocationName } = useApi();
 const title = ref("Tappd");
 
+function isSpecificVenueRoute(path) {
+   // matches exactly /venues/{id} with a single segment after /venues
+   return /^\/venues\/[^/]+$/.test(path);
+}
+
 async function getTitle() {
-   if (route.path.includes("/venues/")) {
-      return `Tappd - ${await getLocationName(route.params.location)}`;
+   // only load name for exact /venues/{ID} routes
+   if (isSpecificVenueRoute(route.path)) {
+      // try common param names, fallback to the segment in the path
+      const id =
+         route.params.location || route.params.id || route.path.split("/")[2];
+      if (id) {
+         return `Tappd - ${await getLocationName(id)}`;
+      }
    }
    return "Tappd";
 }
@@ -39,6 +50,10 @@ const apiUrl = config.public.apiBaseUrl;
 const userStore = useUserStore();
 
 watchEffect(() => userStore.user);
+
+useHead({
+   title: "Locaties | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <template>

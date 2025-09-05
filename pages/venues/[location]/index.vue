@@ -19,6 +19,10 @@ watchEffect(
       title.value = `Welkom bij ${await getLocationName(route.params.location)}`;
    },
 );
+
+useHead({
+   title: "Bestellen | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <template>

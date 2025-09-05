@@ -4,6 +4,10 @@ import { useOrderStore } from "~/stores/order";
 const orderStore = useOrderStore();
 
 orderStore.clear();
+
+useHead({
+   title: "Bestelling Succesvol | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <template>

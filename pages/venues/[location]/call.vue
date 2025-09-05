@@ -26,6 +26,10 @@ async function callStaff() {
          "Bedankt voor het roepen van het personeel. Ze zullen zo snel mogelijk bij u zijn.";
    }
 }
+
+useHead({
+   title: "Personeel Roepen | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <template>

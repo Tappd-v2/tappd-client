@@ -4,7 +4,20 @@
          <h1 class="text-3xl font-bold text-gray-900">Locaties</h1>
       </div>
 
-      <div v-if="locations.length" class="grid gap-4">
+      <div
+         v-if="isLoading"
+         class="loadingContainer flex w-full items-center justify-center"
+      >
+         <ProgressSpinner
+            style="width: 50px; height: 50px"
+            stroke-width="8"
+            fill="transparent"
+            animation-duration=".5s"
+            aria-label="Custom ProgressSpinner"
+         />
+      </div>
+
+      <div v-else-if="locations.length" class="grid gap-4">
          <NuxtLink
             v-for="loc in locations"
             :key="loc.id"
@@ -41,16 +54,20 @@ import { useApi } from "~/composables/useApi";
 const { apiGet } = useApi();
 
 const locations = ref([]);
+const isLoading = ref(true);
 
 onMounted(() => {
    getLocations();
 });
 
 async function getLocations() {
+   isLoading.value = true;
    try {
       locations.value = await apiGet("locations");
    } catch (error) {
       console.error(error);
+   } finally {
+      isLoading.value = false;
    }
 }
 </script>

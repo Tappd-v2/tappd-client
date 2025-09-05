@@ -3,6 +3,10 @@ import { useOrderStore } from "~/stores/order";
 
 const orderStore = useOrderStore();
 const route = useRoute();
+
+useHead({
+   title: "Checkout | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <template>

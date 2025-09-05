@@ -221,6 +221,10 @@ watchEffect(() => {
       showErrorMessage.value = userStore.permissions.orgCode !== location;
    }
 });
+
+useHead({
+   title: "Bestellingen | Tappd - Eenvoudig Bestellen",
+});
 </script>
 
 <style scoped>
