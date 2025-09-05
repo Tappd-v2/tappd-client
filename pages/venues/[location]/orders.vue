@@ -2,9 +2,34 @@
    <div class="min-h-screen bg-gray-50">
       <section v-if="!showErrorMessage">
          <StaffNavigation />
+         <!-- LEGEND: korte uitleg van kleuren (Nederlands) -->
+         <div class="mx-auto mt-8 w-11/12">
+            <div class="flex items-center gap-4 text-sm">
+               <div class="flex items-center gap-2">
+                  <span class="h-4 w-4 rounded-sm bg-blue-500" />
+                  <span class="font-semibold text-gray-700">Nieuw</span>
+               </div>
+               <div class="flex items-center gap-2">
+                  <span class="h-4 w-4 rounded-sm bg-orange-500" />
+                  <span class="font-semibold text-gray-700"
+                     >In behandeling</span
+                  >
+               </div>
+               <div class="flex items-center gap-2">
+                  <span class="h-4 w-4 rounded-sm bg-green-500" />
+                  <span class="font-semibold text-gray-700">Afgerond</span>
+               </div>
+            </div>
+         </div>
+
+         <!-- korte instructie (Nederlands) -->
+         <div class="mx-auto mt-3 w-11/12 text-sm text-gray-600">
+            Tik op een bestelling om deze naar de volgende status te zetten.
+         </div>
+
          <!-- ORDERS -->
          <div class="mx-auto w-11/12">
-            <div class="mt-8 border-t border-gray-300 pt-8">
+            <div class="mt-4 border-t border-gray-300 pt-8">
                <!-- Generate cards dynamically from orders -->
                <div
                   v-for="order in orders"
@@ -18,7 +43,7 @@
                      :class="{ 'bg-opacity-90': order.expanded }"
                   >
                      <p class="flex items-center gap-2 text-lg font-bold">
-                        TAFEL {{ order.table }}
+                        {{ order.table.name }}
                      </p>
                      <div
                         class="text-lg transition-transform duration-300"
@@ -87,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onMounted, onBeforeUnmount } from "vue";
 import { useUserStore } from "~/stores/user";
 import { useApi } from "~/composables/useApi";
 
@@ -97,16 +122,28 @@ const userStore = useUserStore();
 const location = route.params.location;
 const showErrorMessage = ref(false);
 const orders = ref([]);
+const pollIntervalMs = 10000;
+const pollTimer = ref(null);
+
+// helper: sort orders so 'fulfilled' are at the bottom
+function sortOrders(list) {
+   const priority = { new: 0, pending: 1, fulfilled: 2 };
+   return [...list].sort(
+      (a, b) => (priority[a.state] ?? 99) - (priority[b.state] ?? 99),
+   );
+}
 
 async function getOrders() {
    try {
-      const response = await apiGet(`orders`);
+      const response = await apiGet(`orders?locationId=${location}`);
       console.log(response);
 
-      return response.map((order) => ({
+      const mapped = response.map((order) => ({
          ...order,
-         expanded: order.state === "new",
+         expanded: order.state === "new" || order.state === "pending",
       }));
+
+      return sortOrders(mapped);
    } catch (error) {
       console.error("Failed to fetch orders:", error);
       return [];
@@ -118,21 +155,21 @@ async function initializeOrders() {
 }
 
 async function toggleOrderState(order) {
-   const states = ["new", "pending", "fulfilled", "rejected"];
+   const states = ["new", "pending", "fulfilled"];
    const currentIndex = states.indexOf(order.state);
    const nextIndex = (currentIndex + 1) % states.length;
    const newState = states[nextIndex];
 
    try {
-      const response = await apiPatch(
-         `orders/${order.id}/state`,
-         { state: newState },
-         location,
-      );
+      const response = await apiPatch(`orders/${order.id}/state`, {
+         state: newState,
+      });
 
       if (response && !response.unauthorized) {
          order.state = newState;
          order.expanded = order.state === "new" || order.state === "pending";
+         // after changing a state, re-sort so fulfilled orders move to the bottom
+         orders.value = sortOrders(orders.value);
       } else {
          console.error("Failed to update order state");
       }
@@ -159,17 +196,25 @@ function getOrderStatusClass(state, variant = "base") {
          dark: "bg-green-600",
          brighter: "bg-green-400",
       },
-      rejected: {
-         base: "bg-red-500",
-         dark: "bg-red-600",
-         brighter: "bg-red-400",
-      },
    };
    return colors[state]?.[variant] || colors.new.base;
 }
 
 // Initialize
-initializeOrders();
+onMounted(() => {
+   // initial fetch + start periodic polling
+   initializeOrders();
+   pollTimer.value = setInterval(() => {
+      initializeOrders();
+   }, pollIntervalMs);
+});
+
+onBeforeUnmount(() => {
+   if (pollTimer.value) {
+      clearInterval(pollTimer.value);
+      pollTimer.value = null;
+   }
+});
 
 watchEffect(() => {
    if (!userStore.permissions || !userStore.permissions.orgCode) {
