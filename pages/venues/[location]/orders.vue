@@ -2,7 +2,6 @@
    <div class="min-h-screen bg-gray-50">
       <section v-if="!showErrorMessage">
          <StaffNavigation />
-         <!-- LEGEND: korte uitleg van kleuren (Nederlands) -->
          <div class="mx-auto mt-8 w-11/12">
             <div class="flex items-center gap-4 text-sm">
                <div class="flex items-center gap-2">
@@ -22,7 +21,6 @@
             </div>
          </div>
 
-         <!-- korte instructie (Nederlands) -->
          <div class="mx-auto mt-3 w-11/12 text-sm text-gray-600">
             Tik op een bestelling om deze naar de volgende status te zetten.
          </div>
@@ -30,7 +28,6 @@
          <!-- ORDERS -->
          <div class="mx-auto w-11/12">
             <div class="mt-4 border-t border-gray-300 pt-8">
-               <!-- Generate cards dynamically from orders -->
                <div
                   v-for="order in orders"
                   :key="order.id"
@@ -44,6 +41,9 @@
                   >
                      <p class="flex items-center gap-2 text-lg font-bold">
                         {{ order.table.name }}
+                        {{
+                           order.customerName ? "- " + order.customerName : ""
+                        }}
                      </p>
                      <div
                         class="text-lg transition-transform duration-300"
@@ -58,7 +58,7 @@
                         />
                      </div>
                   </div>
-                  <!-- Order Details (only show if expanded) -->
+                  <!-- Order Details -->
                   <Transition name="slide">
                      <div v-if="order.expanded">
                         <div
