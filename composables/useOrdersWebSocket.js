@@ -1,10 +1,11 @@
 import { ref, onBeforeUnmount } from 'vue'
 
 export function useOrdersWebSocket(locationId, onOrderUpdate) {
+  const config = useRuntimeConfig(); 
   const ws = ref(null)
   const reconnectTimeout = ref(null)
-  
-  const WS_URL = 'ws://localhost:3030/ws'
+
+  const WS_URL = config.public.wsUrl || 'ws://localhost:3030/ws'
   const RECONNECT_DELAY = 2000
 
   function connect() {
