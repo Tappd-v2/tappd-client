@@ -35,12 +35,22 @@ export function useApi() {
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: data ? JSON.stringify(data) : undefined,
+            credentials: "include",
          });
          if (!response.ok) {
+            console.error('Response not ok:', response);
+            if (response.status === 401) {
+               return { unauthorized: true };
+            }
+            if(response.status === 400) {
+               return await response.json(); // Return the error details from the response body
+            }
             throw new Error(`HTTP error! status: ${response.status}`);
          }
-         return await response.json();
+         // some endpoints might return an empty body
+         const text = await response.text();
+         return text ? JSON.parse(text) : {};
       } catch (error) {
          console.error(`Error posting to ${endpoint}`, error);
          return null;
