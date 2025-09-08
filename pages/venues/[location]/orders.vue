@@ -223,8 +223,13 @@ function applyIncomingOrder(orderData) {
    // if order exists, update it; otherwise add to list
    const idx = orders.value.findIndex((o) => o.id === orderData.id);
    if (idx !== -1) {
-      // merge
-      orders.value[idx] = { ...orders.value[idx], ...orderData, items: orderData.items || orders.value[idx].items };
+      // merge and set expanded state based on order status
+      orders.value[idx] = { 
+         ...orders.value[idx], 
+         ...orderData, 
+         items: orderData.items || orders.value[idx].items,
+         expanded: orderData.state === 'new' || orderData.state === 'pending'
+      };
    } else {
       // new orders: expand by default for new/pending and add bounce animation
       const mapped = { 
@@ -273,7 +278,8 @@ function connectWs() {
             if (msg.type === 'order_created') {
                applyIncomingOrder(msg.order);
             } else if (msg.type === 'order_updated') {
-               applyIncomingOrder({ order: msg.order, items: msg.items });
+               applyIncomingOrder(msg.order);
+               orders.value = sortOrders(orders.value);
             }
          } catch (err) {
             console.error('Failed to handle ws message', err);
