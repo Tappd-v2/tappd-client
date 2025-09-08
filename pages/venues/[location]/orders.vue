@@ -14,10 +14,11 @@
       <!-- Main content -->
       <section v-else-if="!showErrorMessage">
          <StaffNavigation v-if="!isFullscreen" />
-         <div class="mx-auto mt-8 w-11/12 flex items-center justify-between">
-            <OrderStatusLegend />
+         <div class="mx-auto mt-8 w-11/12 flex items-center justify-between flex-wrap gap-4">
+            <OrderStatusLegend  />
+            
             <button
-               class="ml-4 inline-flex items-center px-3 py-2 bg-white border rounded shadow text-sm text-gray-700 hover:bg-gray-50"
+               class="md:ml-4 w-full md:w-auto inline-flex items-center px-3 py-2 bg-white border rounded shadow text-sm text-gray-700 hover:bg-gray-50"
                @click="() => toggleFullscreen()"
                aria-label="Toggle fullscreen orders"
             >
@@ -27,24 +28,27 @@
             </button>
          </div>
 
-         <div class="mx-auto mt-3 w-11/12 text-sm text-gray-600">
-            Tik op een bestelling om deze naar de volgende status te zetten.
-         </div>
-
          <!-- ORDERS -->
          <div class="mx-auto w-11/12">
             <div class="mt-4 border-t border-gray-300 pt-8">
-               <div v-if="orders.length === 0" class="text-center py-12">
+               <div v-if="orders.length === 0 && tableRequests.length === 0" class="text-center py-12">
                   <div class="text-gray-400 mb-4">
                      <i class="fas fa-receipt text-6xl"></i>
                   </div>
                   <h3 class="text-xl font-semibold text-gray-600 mb-2">
-                     Geen bestellingen
+                     Geen bestellingen of tafeloproepen
                   </h3>
                   <p class="text-gray-500">
-                     Er zijn momenteel geen bestellingen. Nieuwe bestellingen verschijnen hier automatisch.
+                     Er zijn momenteel geen bestellingen of tafeloproepen. Nieuwe items verschijnen hier automatisch.
                   </p>
                </div>
+        
+               <TableRequestCard
+                  v-for="req in tableRequests"
+                  :key="req.id"
+                  :request="req"
+                  @toggle-state="toggleTableRequestState"
+               />
                
                <OrderCard
                   v-for="order in orders"
@@ -72,6 +76,7 @@ import { useUserStore } from "~/stores/user";
 import { useOrdersApi } from "~/composables/useOrdersApi";
 import { useOrdersWebSocket } from "~/composables/useOrdersWebSocket";
 import { getOrderStatusClass, applyOrderUpdate } from "~/utils/orderHelpers";
+import TableRequestCard from '~/components/TableRequestCard.vue'
 
 // Composables and stores
 const route = useRoute();
@@ -83,7 +88,7 @@ const showErrorMessage = ref(false);
 const isLoadingUser = ref(true);
 
 // Orders management
-const { orders, fetchOrders, updateOrderState } = useOrdersApi(location);
+const { orders, fetchOrders, updateOrderState, fetchTableRequest, tableRequests, updateTableRequestState } = useOrdersApi(location);
 
 // WebSocket for real-time updates
 function handleOrderUpdate(orderData, messageType) {
@@ -108,6 +113,10 @@ async function toggleOrderState(order) {
    await updateOrderState(order);
 }
 
+async function toggleTableRequestState(request) {
+   await updateTableRequestState(request);
+}
+
 // Permission check
 watchEffect(() => {
    if (!userStore.permissions || !userStore.permissions.orgCode) {
@@ -125,6 +134,7 @@ watchEffect(() => {
 // Initialize on mount
 onMounted(async () => {
    await fetchOrders();
+   await fetchTableRequest();
    connectWebSocket();
 });
 
