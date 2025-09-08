@@ -95,10 +95,19 @@ function handleOrderUpdate(orderData, messageType) {
    const isNewOrder = messageType === 'order_created'
    // If this is a call (call_created/call_updated) the messageType will start with 'call'
    if (messageType && messageType.startsWith('call')) {
-      // Mark new table requests coming from WS so UI can animate
-      const req = Object.assign({}, orderData)
-      if (messageType === 'call_created') req.isNewFromWs = true
-      tableRequests.value = applyOrderUpdate(tableRequests.value, req, messageType === 'call_created')
+      // Only keep table requests that are in visible states (new/pending). If the call is completed/other, remove it.
+      const state = orderData && orderData.state
+      const isVisibleState = state === 'new' || state === 'pending'
+
+      if (isVisibleState) {
+         // Mark new table requests coming from WS so UI can animate
+         const req = Object.assign({}, orderData)
+         if (messageType === 'call_created') req.isNewFromWs = true
+         tableRequests.value = applyOrderUpdate(tableRequests.value, req, messageType === 'call_created')
+      } else {
+         // remove any completed/hidden requests from local list
+         tableRequests.value = (tableRequests.value || []).filter(r => r.id !== orderData.id)
+      }
    } else {
       orders.value = applyOrderUpdate(orders.value, orderData, isNewOrder)
    }

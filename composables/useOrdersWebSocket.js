@@ -24,12 +24,17 @@ export function useOrdersWebSocket(locationId, onOrderUpdate) {
       socket.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data)
-          console.log('Received ws message', message)
           if (message.type === 'order_created' || message.type === 'order_updated') {
             onOrderUpdate(message.order, message.type)
           } else if (message.type === 'call_created' || message.type === 'call_updated') {
             // Forward call payloads using the same callback so callers can differentiate by messageType
-            onOrderUpdate(message.callRequest, message.type)
+            // Ensure payload looks valid before forwarding
+            const call = message.callRequest
+            if (call && call.id && call.state) {
+              onOrderUpdate(call, message.type)
+            } else {
+              console.warn('Ignoring malformed call websocket message', message)
+            }
           }
         } catch (err) {
           console.error('Failed to handle ws message', err)

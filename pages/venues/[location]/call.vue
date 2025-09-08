@@ -17,8 +17,7 @@ async function callStaff() {
       { tableId: orderStore.table.id },
       route.params.location,
    );
-   if (response.callRequest) {
-      // The api returns a callRequest object if it exists, meaning the staff has already been called
+   if (response.isNew === false) {
       popupMessage.value =
          "Het personeel heeft al een oproep van u ontvangen. Ze zullen zo snel mogelijk bij u zijn.";
    } else {

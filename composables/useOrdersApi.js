@@ -94,17 +94,23 @@ export function useOrdersApi(locationId) {
       })
 
       if (response && !response.unauthorized) {
-        tableRequests.value = tableRequests.value.map(r => {
-          if (r.id === request.id) {
-            return {
-              ...r,
-              state: newState,
-              expanded: false,
-              isNewFromWs: false
+        // If the new state is not visible, remove the request from local list
+        const isVisibleState = newState === 'new' || newState === 'pending'
+        if (!isVisibleState) {
+          tableRequests.value = tableRequests.value.filter(r => r.id !== request.id)
+        } else {
+          tableRequests.value = tableRequests.value.map(r => {
+            if (r.id === request.id) {
+              return {
+                ...r,
+                state: newState,
+                expanded: false,
+                isNewFromWs: false
+              }
             }
-          }
-          return r
-        })
+            return r
+          })
+        }
         return true
       } else {
         console.error('Failed to update table request state - unauthorized or error response')
