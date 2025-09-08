@@ -14,7 +14,7 @@
     </div>
 
     <div class="text-2xl">
-      <i :class="request.state === 'pending' ? 'fas fa-bell' : 'fas fa-bell-slash '" />
+      <i class="fas fa-bell pulse-icon" />
     </div>
   </div>
 </template>

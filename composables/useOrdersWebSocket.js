@@ -24,8 +24,12 @@ export function useOrdersWebSocket(locationId, onOrderUpdate) {
       socket.onmessage = (event) => {
         try {
           const message = JSON.parse(event.data)
+          console.log('Received ws message', message)
           if (message.type === 'order_created' || message.type === 'order_updated') {
             onOrderUpdate(message.order, message.type)
+          } else if (message.type === 'call_created' || message.type === 'call_updated') {
+            // Forward call payloads using the same callback so callers can differentiate by messageType
+            onOrderUpdate(message.callRequest, message.type)
           }
         } catch (err) {
           console.error('Failed to handle ws message', err)

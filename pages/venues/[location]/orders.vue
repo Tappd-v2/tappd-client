@@ -92,8 +92,16 @@ const { orders, fetchOrders, updateOrderState, fetchTableRequest, tableRequests,
 
 // WebSocket for real-time updates
 function handleOrderUpdate(orderData, messageType) {
-   const isNewOrder = messageType === 'order_created';
-   orders.value = applyOrderUpdate(orders.value, orderData, isNewOrder);
+   const isNewOrder = messageType === 'order_created'
+   // If this is a call (call_created/call_updated) the messageType will start with 'call'
+   if (messageType && messageType.startsWith('call')) {
+      // Mark new table requests coming from WS so UI can animate
+      const req = Object.assign({}, orderData)
+      if (messageType === 'call_created') req.isNewFromWs = true
+      tableRequests.value = applyOrderUpdate(tableRequests.value, req, messageType === 'call_created')
+   } else {
+      orders.value = applyOrderUpdate(orders.value, orderData, isNewOrder)
+   }
 }
 
 const { connect: connectWebSocket } = useOrdersWebSocket(location, handleOrderUpdate);
