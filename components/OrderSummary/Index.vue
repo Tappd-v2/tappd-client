@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect, computed } from "vue";
 import { loadStripe } from "@stripe/stripe-js";
 import { useOrderStore } from "~/stores/order";
 import { useUserStore } from "~/stores/user";
@@ -21,6 +21,12 @@ const stripe = ref(null);
 const orderDetailsVisible = ref(false);
 const route = useRoute();
 
+// ensure we display the total with exactly 2 decimals
+const formattedTotal = computed(() => {
+   // itemTotal is already rounded in the store, ensure it's shown with 2 decimal places
+   return Number(orderStore.itemTotal).toFixed(2);
+});
+
 watchEffect(() => orderStore.items);
 watchEffect(() => orderStore.table);
 
@@ -39,7 +45,8 @@ async function createCheckoutSession() {
          items: orderStore.items.map((item) => ({
             id: item.id,
             name: item.name,
-            price: item.price,
+            // ensure price is a number rounded to 2 decimals
+            price: Number(Number(item.price).toFixed(2)),
             quantity: item.amount,
          })),
          tableId: orderStore.table.id,
@@ -88,7 +95,7 @@ const isBtnDisabled = computed(() => {
                Aantal items: {{ orderStore.itemCount }}
             </p>
             <p class="text-lg font-bold">
-               Totaalprijs: &#8364;{{ orderStore.itemTotal }}
+               Totaalprijs: &#8364;{{ formattedTotal }}
             </p>
          </div>
          <Button

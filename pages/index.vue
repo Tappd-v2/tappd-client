@@ -31,9 +31,9 @@
 
                <NuxtLink
                   v-motion-pop-visible
-                  :delay="600"
+                  :delay="300"
                   to="/venues"
-                  class="inline-flex items-center rounded-full bg-gray-900 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:shadow"
+                  class="inline-flex items-center rounded bg-gray-900 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-gray-800 hover:shadow"
                >
                   <i class="fas fa-map-marker-alt mr-3"></i>
                   Bekijk Locaties

@@ -90,14 +90,14 @@ function getButtonLabel(amount) {
             </div>
             <div class="flex items-center">
                <button
-                  class="cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  class="cursor-pointer rounded bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
                   @click="decreaseAmount"
                >
                   <i class="fas fa-minus" />
                </button>
                <span class="mx-3 text-xl">{{ amount }}</span>
                <button
-                  class="cursor-pointer rounded-lg bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  class="cursor-pointer rounded bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
                   @click="increaseAmount"
                >
                   <i class="fas fa-plus" />
@@ -106,7 +106,7 @@ function getButtonLabel(amount) {
          </div>
 
          <button
-            class="w-full cursor-pointer px-3 py-3 text-white transition-colors duration-500"
+            class="w-full cursor-pointer px-3 py-3 text-white transition-colors duration-500 rounded"
             :class="
                amount > 0
                   ? 'bg-blue-500 hover:bg-blue-600'

@@ -15,10 +15,12 @@ export const useOrderStore = defineStore("order", {
          return this.items.reduce((acc, item) => acc + item.amount, 0);
       },
       itemTotal() {
-         return this.items.reduce(
+         const total = this.items.reduce(
             (acc, item) => acc + item.price * item.amount,
             0,
          );
+         // round to 2 decimals and return as number
+         return Number(total.toFixed(2));
       },
    },
    actions: {
@@ -27,7 +29,12 @@ export const useOrderStore = defineStore("order", {
          if (existingItem) {
             existingItem.amount += item.amount;
          } else {
-            this.items.push({ ...item });
+            // ensure price is numeric and rounded to 2 decimals when stored
+            const price =
+               item.price !== undefined && item.price !== null
+                  ? Number(Number(item.price).toFixed(2))
+                  : 0;
+            this.items.push({ ...item, price });
          }
       },
       removeItem(itemId) {

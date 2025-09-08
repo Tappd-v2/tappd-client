@@ -22,7 +22,7 @@
             v-for="loc in locations"
             :key="loc.id"
             :to="`/venues/${loc.id}`"
-            class="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-transform duration-200 hover:scale-105 hover:shadow-md"
+            class="flex items-center justify-between rounded border border-gray-200 bg-white p-4 shadow-sm transition-transform duration-200 hover:scale-105 hover:shadow-md"
          >
             <div>
                <div class="text-lg font-semibold text-gray-900">

@@ -78,7 +78,7 @@ useHead({
                      class="cursor-pointer"
                      :href="`${apiUrl}/logout`"
                      @click="userStore.logout()"
-                     >Log out</a
+                     >Uitloggen</a
                   >
                </li>
                <li v-if="!userStore.user">
