@@ -43,6 +43,7 @@ async function createCheckoutSession() {
             quantity: item.amount,
          })),
          tableId: orderStore.table.id,
+         tableName: orderStore.table.name,
          remarks: orderStore.remarks,
          userId: userStore.user ? userStore.user.id : null,
          locationId: route.params.location,

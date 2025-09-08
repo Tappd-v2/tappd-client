@@ -122,8 +122,6 @@ const userStore = useUserStore();
 const location = route.params.location;
 const showErrorMessage = ref(false);
 const orders = ref([]);
-const pollIntervalMs = 10000;
-const pollTimer = ref(null);
 
 // helper: sort orders so 'fulfilled' are at the bottom
 function sortOrders(list) {
@@ -202,17 +200,85 @@ function getOrderStatusClass(state, variant = "base") {
 onMounted(() => {
    // initial fetch + start periodic polling
    initializeOrders();
-   pollTimer.value = setInterval(() => {
-      initializeOrders();
-   }, pollIntervalMs);
+
+   // open websocket
+   connectWs();
 });
 
 onBeforeUnmount(() => {
-   if (pollTimer.value) {
-      clearInterval(pollTimer.value);
-      pollTimer.value = null;
+   if (ws.value) {
+      try { ws.value.close(); } catch (e) {}
+      ws.value = null;
+   }
+   if (reconnectTimeout.value) {
+      clearTimeout(reconnectTimeout.value);
+      reconnectTimeout.value = null;
    }
 });
+
+function applyIncomingOrder(orderData) {
+   // if order exists, update it; otherwise add to list
+   const idx = orders.value.findIndex((o) => o.id === orderData.id);
+   if (idx !== -1) {
+      // merge
+      orders.value[idx] = { ...orders.value[idx], ...orderData, items: orderData.items || orders.value[idx].items };
+   } else {
+      // new orders: expand by default for new/pending
+      const mapped = { ...orderData, expanded: orderData.state === 'new' || orderData.state === 'pending', items: orderData.items || [] };
+      orders.value.unshift(mapped);
+      orders.value = sortOrders(orders.value);
+   }
+}
+
+const ws = ref(null);
+const reconnectTimeout = ref(null);
+const wsUrl = () => {
+   // Connect to backend WebSocket server on port 3030 (matches backend)
+   return `ws://localhost:3030/ws`;
+};
+
+
+function connectWs() {
+   try {
+      const socket = new WebSocket(wsUrl());
+      ws.value = socket;
+
+      socket.onopen = () => {
+         try {
+            socket.send(JSON.stringify({ locationId: location }));
+         } catch (err) {
+            console.error('Failed to send locationId over ws', err);
+         }
+      };
+
+      socket.onmessage = (e) => {
+         try {
+            const msg = JSON.parse(e.data);
+            if (msg.type === 'order_created') {
+               applyIncomingOrder(msg.order);
+            } else if (msg.type === 'order_updated') {
+               applyIncomingOrder({ order: msg.order, items: msg.items });
+            }
+         } catch (err) {
+            console.error('Failed to handle ws message', err);
+         }
+      };
+
+      socket.onclose = () => {
+         console.warn('Orders websocket closed, reconnecting in 2s');
+         ws.value = null;
+         reconnectTimeout.value = window.setTimeout(() => connectWs(), 2000);
+      };
+
+      socket.onerror = (err) => {
+         console.error('Orders websocket error', err);
+         try { socket.close(); } catch (e) {}
+      };
+   } catch (err) {
+      console.error('Failed to connect websocket', err);
+      reconnectTimeout.value = window.setTimeout(() => connectWs(), 2000);
+   }
+}
 
 watchEffect(() => {
    if (!userStore.permissions || !userStore.permissions.orgCode) {
