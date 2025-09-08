@@ -9,8 +9,8 @@ const { getLocationName } = useApi();
 const title = ref("Tappd");
 
 function isSpecificVenueRoute(path) {
-   // matches exactly /venues/{id} with a single segment after /venues
-   return /^\/venues\/[^/]+$/.test(path);
+   // matches /venues/{id} and nested routes like /venues/{id}/menu
+   return /^\/venues\/[^/]+(?:\/|$)/.test(path);
 }
 
 async function getTitle() {
