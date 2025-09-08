@@ -1,13 +1,9 @@
 <script setup>
 import { useApi } from "~/composables/useApi";
 
-const title = ref("");
+const title = ref("Welkom bij ...");
 const route = useRoute();
 const { getLocationName } = useApi();
-
-useHead({
-   title: "Welcome",
-});
 
 onMounted(async () => {
    title.value = `Welkom bij ${await getLocationName(route.params.location)}`;

@@ -1,7 +1,7 @@
 <template>
    <div class="mx-auto w-11/12 max-w-4xl py-8">
       <h1 class="mb-6 text-2xl font-bold">
-         Welkom, {{ userStore.user ? userStore.user.name : "Not logged in" }}
+         Welkom, {{ userStore.user ? userStore.user.name : "..." }}
       </h1>
 
       <div v-if="orders.length > 0" class="space-y-4">
