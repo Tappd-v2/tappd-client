@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 import { useOrderStore } from "~/stores/order";
 
@@ -64,22 +64,23 @@ function removeFromOrder() {
    isVisible.value = false;
 }
 
-function getButtonLabel(amount) {
-   if (itemAlreadyInOrder.value && amount === 0)
+function getButtonLabel() {
+   const current = amount.value;
+   if (itemAlreadyInOrder.value && current === 0)
       return "Verwijderen uit bestelling";
-   else if (itemAlreadyInOrder.value && amount === originalAmount.value)
+   else if (itemAlreadyInOrder.value && current === originalAmount.value)
       return "Terug";
-   else if (!itemAlreadyInOrder.value && amount === 0) return "Annuleren";
-   else if (amount > 0 && itemAlreadyInOrder.value)
+   else if (!itemAlreadyInOrder.value && current === 0) return "Annuleren";
+   else if (current > 0 && itemAlreadyInOrder.value)
       return "Bestelling bijwerken";
    else return "Toevoegen aan bestelling";
 }
 </script>
 
 <template>
-   <Drawer v-model:visible="isVisible" position="bottom" class="min-h-56">
-      <div class="mx-auto flex flex-col items-center justify-between">
-         <div class="flex w-full items-center justify-between pb-6">
+   <Drawer v-model:visible="isVisible" position="bottom" :style="{ height: 'auto' }">
+      <div class="mx-auto flex flex-col items-center justify-between " style="max-height:80vh; overflow-y:auto;">
+         <div class="flex w-full items-center justify-between gap-10 pb-6">
             <div>
                <h3 class="text-lg font-bold">
                   {{ orderStore.selectedItem?.name }}
@@ -90,17 +91,17 @@ function getButtonLabel(amount) {
             </div>
             <div class="flex items-center">
                <button
-                  class="cursor-pointer rounded bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  class="cursor-pointer rounded bg-blue-500 px-2 py-1 md:px-3 md:py-2 text-white transition-colors duration-500 hover:bg-blue-600"
                   @click="decreaseAmount"
                >
-                  <i class="fas fa-minus" />
+                  <i class="fas fa-minus text-sm" />
                </button>
                <span class="mx-3 text-xl">{{ amount }}</span>
                <button
-                  class="cursor-pointer rounded bg-blue-500 px-3 py-2 text-white transition-colors duration-500 hover:bg-blue-600"
+                  class="cursor-pointer rounded bg-blue-500 px-2 py-1 md:px-3 md:py-2 text-white transition-colors duration-500 hover:bg-blue-600"
                   @click="increaseAmount"
                >
-                  <i class="fas fa-plus" />
+                  <i class="fas fa-plus text-sm" />
                </button>
             </div>
          </div>
@@ -114,7 +115,7 @@ function getButtonLabel(amount) {
             "
             @click="handleButtonClick"
          >
-            {{ getButtonLabel(amount) }}
+            {{ getButtonLabel() }}
          </button>
       </div>
    </Drawer>
