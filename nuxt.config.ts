@@ -41,6 +41,7 @@ export default defineNuxtConfig({
       public: {
          apiBaseUrl: process.env.API_BASE_URL,
          stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+         wsUrl: process.env.WS_URL,
       },
    },
 
