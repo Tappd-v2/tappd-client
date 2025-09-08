@@ -1,6 +1,18 @@
 <template>
    <div class="min-h-screen bg-gray-50">
-      <section v-if="!showErrorMessage">
+      <!-- Loading state -->
+      <div v-if="isLoadingUser" class="flex justify-center items-center min-h-screen">
+         <ProgressSpinner
+            style="width: 50px; height: 50px"
+            stroke-width="8"
+            fill="transparent"
+            animation-duration=".5s"
+            aria-label="Custom ProgressSpinner"
+         />
+      </div>
+      
+      <!-- Main content -->
+      <section v-else-if="!showErrorMessage">
          <StaffNavigation />
          <div class="mx-auto mt-8 w-11/12">
             <OrderStatusLegend />
@@ -35,6 +47,8 @@
             </div>
          </div>
       </section>
+      
+      <!-- Error state -->
       <ErrorMessage
          v-else
          class="m-10"
@@ -57,6 +71,7 @@ const location = route.params.location;
 
 // Local state
 const showErrorMessage = ref(false);
+const isLoadingUser = ref(true);
 
 // Orders management
 const { orders, fetchOrders, updateOrderState } = useOrdersApi(location);
@@ -77,9 +92,14 @@ async function toggleOrderState(order) {
 // Permission check
 watchEffect(() => {
    if (!userStore.permissions || !userStore.permissions.orgCode) {
+      isLoadingUser.value = true;
+      showErrorMessage.value = false;
+   } else if(userStore.permissions.orgCode !== location) {
       showErrorMessage.value = true;
+      isLoadingUser.value = false;
    } else {
-      showErrorMessage.value = userStore.permissions.orgCode !== location;
+      showErrorMessage.value = false;
+      isLoadingUser.value = false;
    }
 });
 
