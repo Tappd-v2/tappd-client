@@ -1,4 +1,6 @@
 <script setup>
+const layout = useState('layout', () => 'default');
+
 const description =
    "Tappd is an online ordering service for restaurants, bars, and cafes.";
 const ogTitle = "Tappd";
@@ -61,7 +63,7 @@ useHead({
 
 <template>
    <div>
-      <NuxtLayout>
+      <NuxtLayout :name="layout">
          <NuxtPage />
       </NuxtLayout>
    </div>

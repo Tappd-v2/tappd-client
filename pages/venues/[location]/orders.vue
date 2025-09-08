@@ -13,9 +13,18 @@
       
       <!-- Main content -->
       <section v-else-if="!showErrorMessage">
-         <StaffNavigation />
-         <div class="mx-auto mt-8 w-11/12">
+         <StaffNavigation v-if="!isFullscreen" />
+         <div class="mx-auto mt-8 w-11/12 flex items-center justify-between">
             <OrderStatusLegend />
+            <button
+               class="ml-4 inline-flex items-center px-3 py-2 bg-white border rounded shadow text-sm text-gray-700 hover:bg-gray-50"
+               @click="() => toggleFullscreen()"
+               aria-label="Toggle fullscreen orders"
+            >
+               <i :class="fullscreenIconClass" class="mr-2"></i>
+               <span v-if="isFullscreen">Verlaat volledig scherm</span>
+               <span v-else>Volledig scherm</span>
+            </button>
          </div>
 
          <div class="mx-auto mt-3 w-11/12 text-sm text-gray-600">
@@ -58,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted } from "vue";
+import { ref, watchEffect, onMounted, computed } from "vue";
 import { useUserStore } from "~/stores/user";
 import { useOrdersApi } from "~/composables/useOrdersApi";
 import { useOrdersWebSocket } from "~/composables/useOrdersWebSocket";
@@ -83,6 +92,16 @@ function handleOrderUpdate(orderData, messageType) {
 }
 
 const { connect: connectWebSocket } = useOrdersWebSocket(location, handleOrderUpdate);
+
+// Fullscreen layout state (global)
+const layout = useState('layout');
+
+const isFullscreen = computed(() => layout.value === 'orders-fullscreen');
+const fullscreenIconClass = computed(() => isFullscreen.value ? 'fas fa-compress' : 'fas fa-expand');
+
+function toggleFullscreen() {
+   layout.value = isFullscreen.value ? 'default' : 'orders-fullscreen';
+}
 
 // Event handlers
 async function toggleOrderState(order) {
