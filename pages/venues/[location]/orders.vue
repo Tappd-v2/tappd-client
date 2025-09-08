@@ -32,7 +32,10 @@
                   v-for="order in orders"
                   :key="order.id"
                   class="card-hover mb-4 overflow-hidden rounded-lg text-white"
-                  :class="getOrderStatusClass(order.state, 'base')"
+                  :class="[
+                     getOrderStatusClass(order.state, 'base'),
+                     { 'bounce-new-order': order.isNewFromWs }
+                  ]"
                   @click="toggleOrderState(order)"
                >
                   <div
@@ -223,10 +226,23 @@ function applyIncomingOrder(orderData) {
       // merge
       orders.value[idx] = { ...orders.value[idx], ...orderData, items: orderData.items || orders.value[idx].items };
    } else {
-      // new orders: expand by default for new/pending
-      const mapped = { ...orderData, expanded: orderData.state === 'new' || orderData.state === 'pending', items: orderData.items || [] };
+      // new orders: expand by default for new/pending and add bounce animation
+      const mapped = { 
+         ...orderData, 
+         expanded: orderData.state === 'new' || orderData.state === 'pending', 
+         items: orderData.items || [],
+         isNewFromWs: true
+      };
       orders.value.unshift(mapped);
       orders.value = sortOrders(orders.value);
+      
+      // Remove bounce animation after 3 seconds
+      setTimeout(() => {
+         const order = orders.value.find(o => o.id === orderData.id);
+         if (order) {
+            order.isNewFromWs = false;
+         }
+      }, 3000);
    }
 }
 
@@ -346,5 +362,33 @@ useHead({
 
 .fade-bg {
    transition: background-color 0.3s ease;
+}
+
+@keyframes bounceNewOrder {
+   0% {
+      transform: translateY(0) scale(1);
+   }
+   15% {
+      transform: translateY(-8px) scale(1.03);
+   }
+   30% {
+      transform: translateY(0) scale(1);
+   }
+   45% {
+      transform: translateY(-4px) scale(1.01);
+   }
+   60% {
+      transform: translateY(0) scale(1);
+   }
+   75% {
+      transform: translateY(-2px) scale(1.005);
+   }
+   100% {
+      transform: translateY(0) scale(1);
+   }
+}
+
+.bounce-new-order {
+   animation: bounceNewOrder 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 </style>
