@@ -13,6 +13,18 @@
          <!-- ORDERS -->
          <div class="mx-auto w-11/12">
             <div class="mt-4 border-t border-gray-300 pt-8">
+               <div v-if="orders.length === 0" class="text-center py-12">
+                  <div class="text-gray-400 mb-4">
+                     <i class="fas fa-receipt text-6xl"></i>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-600 mb-2">
+                     Geen bestellingen
+                  </h3>
+                  <p class="text-gray-500">
+                     Er zijn momenteel geen bestellingen. Nieuwe bestellingen verschijnen hier automatisch.
+                  </p>
+               </div>
+               
                <OrderCard
                   v-for="order in orders"
                   :key="order.id"
@@ -82,7 +94,3 @@ useHead({
    title: "Bestellingen | Tappd - Eenvoudig Bestellen",
 });
 </script>
-
-<style scoped>
-/* Minimal styles for page-specific layout only */
-</style>
